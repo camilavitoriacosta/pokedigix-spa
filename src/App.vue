@@ -1,34 +1,84 @@
 <script>
-import axios from 'axios';
-export default {
-  name: "ListaDePokemons",
-  data() {
-    return { pokemons: [] };
-  },
-  async created() {
-    try {
-      let resposta = await axios.get('http://localhost:8080/api/v1/pokemons');
-      this.pokemons = resposta.data;
-    } catch (erro) {
-      console.log(erro);
-    }
-  }
-
-}
+import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div>
-    <h2>Lista de Pokemons</h2>
-    <ul>
-      <li v-for="pokemon in pokemons" :key="pokemon.id">
-        <img :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ pokemon.numeroPokedex +'.png'" alt="imagem pokemon"/>
-        {{pokemon.numeroPokedex}} - {{pokemon.nome}}
-      </li>
-    </ul>
-  </div>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-cabecalho navbar-dark sticky-toper">
+      <div class="container-md">
+        <span class="navbar-brand" href="#">Pokédigix</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <RouterLink to="/" class="nav-link active" aria-current="page">Home</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink to="/pokemons-selvagens" class="nav-link"> Pokemons Selvagens</RouterLink>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Ataques
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <RouterLink class="dropdown-item" to="/ataques/novo">Criar</RouterLink>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <RouterLink class="dropdown-item" to="/ataques/lista">Listar</RouterLink>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Tipos
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <RouterLink class="dropdown-item" to="/tipos/novo">Criar</RouterLink>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <RouterLink class="dropdown-item" to="/tipos/lista">Listar</RouterLink>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pokemons
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <RouterLink class="dropdown-item" to="/pokemons/novo">Criar</RouterLink>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <RouterLink class="dropdown-item" to="/pokemons/lista">Listar</RouterLink>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <RouterView></RouterView>
+  </main>
 </template>
 
 <style>
-
+.bg-cabecalho {
+  background-color: rgb(148, 105, 189);
+}
 </style>
