@@ -23,17 +23,17 @@ export default {
 </script>
     
 <template>
-    <div>
+    <div class="container-lg mt-4">
         <h2>Lista de Tipos</h2>
-        <div class="container-lg text-center row">
-            <div class="col-md-auto" v-for="tipo in tipos" :key="tipo.id">
-                <div class="card mb-4" style="max-width: 240px;">
-                    <h5 class="card-header">
-                        {{tipo.nome}}
-                    </h5>
-                </div>
-            </div>
+        <div class="row" v-for="tipo in tipos" :key="tipo.id">
+            <p class="col border-p p-2 mb-2 fs-5 bg-light font-monospace"> #{{tipo.id}} {{tipo.nome}} </p>
         </div>
     </div>
 </template>
+
+<style>
+.border-p {
+    border-left: 5px solid rgb(148, 105, 189);
+}
+</style>
     
