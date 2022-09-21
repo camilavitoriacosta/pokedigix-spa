@@ -42,6 +42,9 @@ export default {
                   :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/'+ pokemon.numeroPokedex +'.png'"
                   alt="imagem pokemon" />
                 <p class="card-text"> Nível: {{pokemon.nivel}} </p>
+                <p class="card-text"> Peso: {{pokemon.peso}} </p>
+                <p class="card-text"> Altura: {{pokemon.altura}} </p>
+                <p class="card-text"> Felicidade: {{pokemon.felicidade}} </p>
               </div>
             </div>
           </div>
