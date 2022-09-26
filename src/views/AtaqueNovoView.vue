@@ -39,8 +39,21 @@ export default {
                 .catch(erro => {
                     console.log(erro);
                 })
+        },
+
+        salvar() {
+            AtaqueDataService.criar(this.ataqueRequest)
+                .then(resposta => {
+                    this.ataqueRequest.id = resposta.id;
+                    this.salvo = true;
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    this.salvo = false;
+                })
         }
     },
+
     mounted() {
         this.ataqueRequest.categoria = this.categorias[0].nomeBanco;
         this.carregarTipos();
@@ -89,6 +102,10 @@ export default {
                             <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{tipo.nome}}
                             </option>
                         </select>
+                    </div>
+                    <div class="col-12">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricao" rows="3" v-model="ataqueRequest.descricao"></textarea>
                     </div>
                     <button @click.prevent="salvar" class="btn btn-dark">Salvar</button>
                 </form>

@@ -16,13 +16,13 @@ class AtaqueDataService {
         return resposta.data;
     }
 
-    async criar(tipo) {
-        let resposta = await http.post('/ataques', tipo);
+    async criar(ataque) {
+        let resposta = await http.post('/ataques', ataque);
         return resposta.data;
     }
 
-    async atualizar(tipo, id) {
-        let resposta = await http.put('/ataques/${id}', tipo);
+    async atualizar(ataque, id) {
+        let resposta = await http.put('/ataques/${id}', ataque);
         return resposta.data;
     }
 
