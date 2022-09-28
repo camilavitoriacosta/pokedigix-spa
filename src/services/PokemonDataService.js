@@ -13,12 +13,12 @@ class PokemonDataService {
     }
 
     async buscarPorId(id) {
-        let resposta = await http.get('/pokemons/${id}');
+        let resposta = await http.get('/pokemons/' + id);
         return resposta.data;
     }
 
     async buscarPeloIdDoTipo(id) {
-        let resposta = await http.get('/pokemons/tipo/${id}');
+        let resposta = await http.get('/pokemons/tipo/' + id);
         return resposta.data;
     }
 
@@ -28,16 +28,16 @@ class PokemonDataService {
     }
 
     async atualizar(pokemon, id) {
-        let resposta = await http.put('/pokemons/${id}', pokemon);
+        let resposta = await http.put('/pokemons/' + id, pokemon);
         return resposta.data;
     }
 
     async removerPorId(id) {
-        await http.delete('/pokemons/${id}');
+        await http.delete('/pokemons/' + id);
     }
 
     async removerPorNome(termo) {
-        await http.delete('/pokemons?termo=${termo}');
+        await http.delete('/pokemons?termo=' + termo);
     }
 }
 

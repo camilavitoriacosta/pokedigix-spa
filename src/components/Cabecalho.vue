@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router';
 <template>
     <header>
         <nav class="navbar navbar-expand-lg bg-cabecalho navbar-dark sticky-toper">
-            <div class="container-md">
+            <div class="container-lg">
                 <span class="navbar-brand" href="#">Pokédigix</span>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

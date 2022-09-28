@@ -3,6 +3,7 @@ import PokemonListaView from '../views/PokemonListaView.vue'
 import TipoNovoView from '../views/TipoNovoView.vue'
 import TipoListaView from '../views/TipoListaView.vue'
 import AtaqueNovoView from '../views/AtaqueNovoView.vue'
+import AtaqueEditView from '../views/AtaqueEditView.vue'
 import AtaqueListaView from '../views/AtaqueListaView.vue'
 
 const router = createRouter({
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/ataques/novo',
       name: 'ataques-novo',
       component: AtaqueNovoView
+    },
+    {
+      path: '/ataques/editar/:id',
+      name: 'ataques-editar',
+      component: AtaqueEditView
     },
     {
       path: '/ataques/lista',

@@ -7,12 +7,12 @@ class AtaqueDataService {
     }
 
     async buscarPorTermo(termo) {
-        let resposta = await http.get('/ataques?termo=${termo}');
+        let resposta = await http.get('/ataques?termo=' + termo);
         return resposta.data;
     }
 
     async buscarPorId(id) {
-        let resposta = await http.get('/ataques/${id}');
+        let resposta = await http.get('/ataques/' + id);
         return resposta.data;
     }
 
@@ -22,12 +22,12 @@ class AtaqueDataService {
     }
 
     async atualizar(ataque, id) {
-        let resposta = await http.put('/ataques/${id}', ataque);
+        let resposta = await http.put('/ataques/' + id, ataque);
         return resposta.data;
     }
 
     async removerPorId(id) {
-        await http.delete('/ataques/${id}');
+        await http.delete('/ataques/' + id);
     }
 }
 
