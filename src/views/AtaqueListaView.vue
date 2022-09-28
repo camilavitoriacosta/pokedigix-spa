@@ -15,8 +15,19 @@ export default {
                     console.log(erro);
                 })
         },
+
         editar(id) {
             this.$router.push({ name: 'ataques-editar', params: { id: id } });
+        },
+
+        remover(id) {
+            AtaqueDataService.removerPorId(id)
+                .catch(erro => {
+                    console.log(erro);
+                });
+
+            let i = this.ataques.map(item => item.id).indexOf(id) // find index of your object
+            this.ataques.splice(i, 1) // remove it from array
         }
     },
     mounted() {
@@ -41,6 +52,7 @@ export default {
                         <th class="col">Categoria</th>
                         <th class="col">Tipo</th>
                         <th class="col"></th>
+                        <th class="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,6 +75,11 @@ export default {
                                         d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                 </svg>
                                 Editar
+                            </button>
+                        </td>
+                        <td>
+                            <button @click="remover(ataque.id)" class="btn btn-dark">
+                                Remover
                             </button>
                         </td>
                     </tr>
