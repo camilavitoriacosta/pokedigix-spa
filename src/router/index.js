@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PokemonListaView from '../views/PokemonListaView.vue'
 import TipoNovoView from '../views/TipoNovoView.vue'
+import TipoEditarView from '../views/TipoEditarView.vue'
 import TipoListaView from '../views/TipoListaView.vue'
 import AtaqueNovoView from '../views/AtaqueNovoView.vue'
 import AtaqueEditView from '../views/AtaqueEditView.vue'
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/tipos/novo',
       name: 'tipos-novo',
       component: TipoNovoView
+    },
+    {
+      path: '/tipos/editar/:id',
+      name: 'tipos-editar',
+      component: TipoEditarView
     },
     {
       path: '/tipos/lista',
