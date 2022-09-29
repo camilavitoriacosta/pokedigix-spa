@@ -1,21 +1,33 @@
 <script>
 import AtaqueDataService from '../services/AtaqueDataService';
+import Loading from "vue-loading-overlay";
+
 export default {
     name: "ataques-lista",
     data() {
         return {
             ataques: [],
-            idSelecionado: null,
+            ataqueSelecionado: this.inicializarAtaque(),
+            isLoading: false,
+            fullPage: false,
         }
     },
+
+    components: {
+        Loading,
+    },
+
     methods: {
-        buscarTipos() {
+        buscarAtaques() {
+            this.isLoading = true;
             AtaqueDataService.buscarTodos()
                 .then(resposta => {
                     this.ataques = resposta;
+                    this.isLoading = false;
                 })
                 .catch(erro => {
                     console.log(erro);
+                    this.isLoading = false;
                 })
         },
 
@@ -23,27 +35,45 @@ export default {
             this.$router.push({ name: 'ataques-editar', params: { id: id } });
         },
 
-        remover() {
-
-            const id = this.idSelecionado;
-            AtaqueDataService.removerPorId(id)
-                .catch(erro => {
-                    console.log(erro);
-                });
-
-            let i = this.ataques.map(item => item.id).indexOf(id) // find index of your object
-            this.ataques.splice(i, 1) // remove it from array
-
-            this.idSelecionado = null;
+        inicializarAtaque() {
+            return {
+                id: null,
+                nome: null
+            }
         },
 
-        selecionarIdAtaque(id) {
-            this.idSelecionado = id;
+        removerAtaqueSelecionado() {
+            this.isLoading = true;
+            const id = this.ataqueSelecionado.id;
+            AtaqueDataService.removerPorId(id)
+                .then(resposta => {
+                    // Remover da lista já carregada
+                    // let i = this.ataques.map(item => item.id).indexOf(id) // find index of your object
+                    // this.ataques.splice(i, 1) // remove it from array
+                    this.ataques = this.ataques.filter(ataque => ataque.id != id);
+
+                    // Carregar novamente a lista
+                    //this.buscarAtaques();
+
+                    this.isLoading = false;
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    this.isLoading = false;
+
+                });
+
+            this.ataqueSelecionado = this.inicializarAtaque();
+        },
+
+        selecionar(ataque) {
+            this.ataqueSelecionado.id = ataque.id;
+            this.ataqueSelecionado.nome = ataque.nome;
         }
     },
 
     mounted() {
-        this.buscarTipos();
+        this.buscarAtaques();
     }
 }
 </script>
@@ -51,7 +81,9 @@ export default {
 <template>
     <div class="container-lg mt-4">
         <h2>Lista de Ataques</h2>
-        <div class="row">
+        <div class="row table-responsive">
+            <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />
+
             <table class="table table-light table-striped table-bordered">
                 <thead class="table-dark">
                     <tr class="text-center">
@@ -63,8 +95,7 @@ export default {
                         <th class="col">PP</th>
                         <th class="col">Categoria</th>
                         <th class="col">Tipo</th>
-                        <th class="col"></th>
-                        <th class="col"></th>
+                        <th class="col" colspan="2"> Ações </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,14 +119,13 @@ export default {
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#modalExcluir" @click="selecionarIdAtaque(ataque.id)">
+                                data-bs-target="#modalConfimacaoExclusao" @click="selecionar(ataque)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-trash-fill" viewBox="0 0 16 16">
                                     <path
                                         d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                                 </svg>
                             </button>
-
                         </td>
                     </tr>
                 </tbody>
@@ -104,19 +134,21 @@ export default {
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalConfimacaoExclusao" tabindex="-1" aria-labelledby="modalConfimacaoExclusao"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmação de exclusão</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Deseja excluir o ataque com o id: {{idSelecionado}}?
+                    Deseja remover o Ataque <strong> #{{this.ataqueSelecionado.id}} - {{this.ataqueSelecionado.nome}}
+                    </strong>?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button @click="remover()" class="btn btn-dark" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button @click="removerAtaqueSelecionado()" class="btn btn-dark" data-bs-dismiss="modal">
                         Remover
                     </button>
                 </div>
