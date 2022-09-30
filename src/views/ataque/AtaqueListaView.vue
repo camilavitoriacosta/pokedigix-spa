@@ -1,5 +1,5 @@
 <script>
-import AtaqueDataService from '../services/AtaqueDataService';
+import AtaqueDataService from '../../services/AtaqueDataService';
 import Loading from "vue-loading-overlay";
 
 export default {

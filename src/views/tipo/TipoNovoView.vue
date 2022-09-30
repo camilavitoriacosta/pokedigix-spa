@@ -1,13 +1,13 @@
 <script>
-import TipoDataService from '../services/TipoDataService'
-import Tipo from '../models/Tipo'
+import TipoDataService from '../../services/TipoDataService'
+import Tipo from '../../models/Tipo'
 
 export default {
     name: 'tipos-novo',
     data() {
         return {
             tipo: new Tipo(),
-            salvo: false
+            salvo: false,
         }
     },
     methods: {

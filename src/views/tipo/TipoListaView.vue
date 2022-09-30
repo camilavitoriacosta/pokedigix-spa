@@ -1,15 +1,16 @@
 <script>
-import TipoDataService from '../services/TipoDataService';
+import TipoDataService from '../../services/TipoDataService';
 export default {
     name: "tipos-lista",
     data() {
         return {
             tipos: [],
-            tipoSelecionado: this.inicicializarTipo()
+            tipoSelecionado: this.inicializarTipo(),
         };
     },
+
     methods: {
-        inicicializarTipo() {
+        inicializarTipo() {
             return {
                 id: null,
                 nome: null
@@ -52,7 +53,7 @@ export default {
                     this.isLoading = false;
                 });
 
-            this.tipoSelecionado = this.inicializarAtaque();
+            this.tipoSelecionado = this.inicializarTipo();
         },
     },
     mounted() {
@@ -66,7 +67,7 @@ export default {
         <h2>Lista de Tipos</h2>
         <div class="row border-p bg-indigo mb-2 p-2" v-for="tipo in tipos" :key="tipo.id">
             <div class="col">
-                <p class="col fs-5 font-monospace m-0"> #{{tipo.id}} {{tipo.nome}} </p>
+                <p class="fs-5 font-monospace m-0"> #{{tipo.id}} {{tipo.nome}} </p>
             </div>
             <div class="col-1  m-0">
                 <button @click="editar(tipo.id)" class="btn btn-outline-dark">

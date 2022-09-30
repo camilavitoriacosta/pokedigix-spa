@@ -1,8 +1,8 @@
 <script>
-import AtaqueDataService from "../services/AtaqueDataService"
-import TipoDataService from "../services/TipoDataService"
-import AtaqueRequest from "../models/AtaqueRequest"
-import AtaqueResponse from "../models/AtaqueResponse"
+import AtaqueDataService from "../../services/AtaqueDataService"
+import TipoDataService from "../../services/TipoDataService"
+import AtaqueRequest from "../../models/AtaqueRequest"
+import AtaqueResponse from "../../models/AtaqueResponse"
 
 export default {
     name: 'ataques-novo',

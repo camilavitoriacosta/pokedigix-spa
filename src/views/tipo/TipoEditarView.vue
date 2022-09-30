@@ -1,6 +1,6 @@
 <script>
-import TipoDataService from '../services/TipoDataService'
-import Tipo from '../models/Tipo'
+import TipoDataService from '../../services/TipoDataService'
+import Tipo from '../../models/Tipo'
 
 export default {
     name: 'tipos-editar',
