@@ -55,28 +55,38 @@ export default {
     },
     mounted() {
         this.carregarTipos();
+        this.carregarAtaques();
     }
 }
 </script>
 <template>
     <div class="container  mt-4">
-        <div class="alert alert-success" role="alert" v-if="salvo">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
             <span>O Pokemon foi salvo com sucesso!</span>
             <span> Pokemon { id: {{pokemonResponse.id}}, nome: {{ pokemonResponse.nome}} } </span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Pokemon </h1>
                 <form class="g-3">
                     <div class="row">
-                        <div class="col-9">
+                        <div class="col-4">
+                            <div class="card" style="width: 140px; height: 150px;">
+                                <img :alt="'Imagem do Pokemon' + pokemonRequest.nome" :title="pokemonRequest.nome"
+                                    class="card-img" :src="
+                                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+                                      pokemonRequest.numeroPokedex +
+                                      '.png' 
+                                    " v-if="pokemonRequest.numeroPokedex > 0" />
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <label for="numeroPokedex" class="form-label">Nº:</label>
+                            <input type="number" class="form-control" id="numeroPokedex" required v-model="pokemonRequest.numeroPokedex">
+
                             <label for="nome" class="form-label">Nome:</label>
                             <input type="text" class="form-control" id="nome" required v-model="pokemonRequest.nome">
-                        </div>
-                        <div class="col-3">
-                            <label for="numeroPokedex" class="form-label">Nº:</label>
-                            <input type="number" class="form-control" id="numeroPokedex" required
-                                v-model="pokemonRequest.numeroPokedex">
                         </div>
                     </div>
                     <div class="row">
@@ -156,6 +166,45 @@ export default {
                             </select>
                         </div>
                     </div>
+                    <fieldset class="row m-0 mt-4 mb-4 p-3 border border-secondary rounded">
+                        <div class="col-form-label col-sm-2 pt-0">
+                            <legend>Ataques</legend>
+                            <label for="quantidadeAtaque" class="form-label"> Quantidade:</label>
+                            <input type="number" name="quantidadeAtaque" id="quantidadeAtaque" class="form-control"
+                                min="1" max="4" value="1">
+                        </div>
+                        <div class="col-sm-10">
+                            <label for="ataque1" class="form-label"> Ataque 1:</label>
+                            <select id="ataque1" class="form-select">
+                                <option value="0"> Nenhum </option>
+                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
+                                    {{ataque.nome}}
+                                </option>
+                            </select>
+                            <label for="ataque2" class="form-label"> Ataque 2:</label>
+                            <select id="ataque2" class="form-select">
+                                <option value="0"> Nenhum </option>
+                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
+                                    {{ataque.nome}}
+                                </option>
+                            </select>
+                            <label for="ataque3" class="form-label"> Ataque 3:</label>
+                            <select id="ataque3" class="form-select">
+                                <option value="0"> Nenhum </option>
+                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
+                                    {{ataque.nome}}
+                                </option>
+                            </select>
+                            <label for="ataque4" class="form-label"> Ataque 4:</label>
+                            <select id="ataque4" class="form-select">
+                                <option value="0"> Nenhum </option>
+                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
+                                    {{ataque.nome}}
+                                </option>
+                            </select>
+                        </div>
+
+                    </fieldset>
                     <div class="row text-center">
                         <div class="col-12 mt-2">
                             <button @click.prevent="salvar" class="btn btn-dark col-12">Salvar</button>

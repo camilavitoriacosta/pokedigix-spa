@@ -76,9 +76,10 @@ export default {
 
 <template>
     <div class="container  mt-4">
-        <div class="alert alert-success" role="alert" v-if="salvo">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
             <span>O Ataque foi salvo com sucesso!</span>
             <span> Ataque { id: {{ataqueResponse.id}}, nome: {{ataqueResponse.nome}} } </span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div class="card">
             <div class="card-body">
