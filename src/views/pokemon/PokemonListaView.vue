@@ -53,6 +53,17 @@ export default {
         });
 
       this.pokemonSelecionado = this.inicializarPokemon();
+    },
+    shiny(pokemon) {
+      const img = document.getElementById("imgPokemon" + pokemon.id);
+      if (img.getAttribute('shiny') == "false") {
+        img.setAttribute('src', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/' + pokemon.numeroPokedex + '.png')
+        img.setAttribute('shiny', true);
+      }
+      else if(img.getAttribute('shiny') == "true") {
+        img.setAttribute('src', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/' + pokemon.numeroPokedex + '.png')
+        img.setAttribute('shiny', false);
+      }
     }
   },
   mounted() {
@@ -79,9 +90,13 @@ export default {
             <div class="col">
               <h5 class="card-title">{{pokemon.nome}}</h5>
               <p class="card-text"> Nível: {{pokemon.nivel}} </p>
-              <img class="img-fluid rounded-start" style="max-width: 140px;"
+              <img class="img-fluid rounded-start" style="max-width: 140px;" :id="'imgPokemon'+ pokemon.id"
+                :shiny="false"
                 :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/'+ pokemon.numeroPokedex +'.png'"
                 alt="imagem pokemon" />
+              <button type="button" class="m-1 btn btn-outline-success" @click="shiny(pokemon)">
+                Shiny
+              </button>
             </div>
             <div class="mt-2">
               <button class="m-1 btn btn-outline-primary" data-bs-toggle="collapse"
