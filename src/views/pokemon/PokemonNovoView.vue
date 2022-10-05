@@ -50,9 +50,11 @@ export default {
 
         salvar() {
             this.pokemonRequest.tiposIds = [...new Set(this.pokemonRequest.tiposIds.filter(tipoId => tipoId != 0))];
-            this.pokemonRequest.ataquesIds = [...new Set(this.ataquesSelecionados.filter(ataque => ataque.id != 0))];
+            for (let index = 0; index < this.ataquesSelecionados.length; index++) {
+                this.pokemonRequest.ataquesIds[index] = this.ataquesSelecionados[index].id;
+            }
 
-            console.log(this.pokemonRequest.tiposIds);
+            console.log(this.pokemonRequest.ataquesIds);
 
             PokemonDataService.criar(this.pokemonRequest)
                 .then(resposta => {
