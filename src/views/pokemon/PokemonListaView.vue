@@ -1,11 +1,21 @@
 <script>
 import PokemonDataService from '../../services/PokemonDataService';
+import Loading from "vue-loading-overlay";
 
 export default {
   name: "pokemons-lista",
   data() {
-    return { pokemons: [] };
+    return {
+      pokemons: [],
+      pokemonSelecionado: this.inicializarPokemon(),
+      isLoading: false,
+    };
   },
+
+  components: {
+    Loading
+  },
+
   methods: {
     buscarPokemons() {
       PokemonDataService.buscarTodos()
@@ -15,6 +25,34 @@ export default {
         .catch(erro => {
           console.log(erro);
         })
+    },
+
+    inicializarPokemon() {
+      return {
+        "id": null,
+        "nome": null
+      };
+    },
+
+    selecionarPokemon(pokemon) {
+      this.pokemonSelecionado.id = pokemon.id;
+      this.pokemonSelecionado.nome = pokemon.nome;
+    },
+
+    removerPokemonSelecionado() {
+      this.isLoading = true;
+      const id = this.pokemonSelecionado.id;
+      PokemonDataService.removerPorId(id)
+        .then(resposta => {
+          this.pokemons = this.pokemons.filter(pokemon => pokemon.id != id);
+          this.isLoading = false;
+        })
+        .catch(erro => {
+          console.log(erro);
+          this.isLoading = false;
+        });
+
+      this.pokemonSelecionado = this.inicializarPokemon();
     }
   },
   mounted() {
@@ -26,9 +64,11 @@ export default {
 <template>
   <div>
     <h2>Lista de Pokemons</h2>
+    <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />
+
     <div class="container-lg text-center row">
       <div class="col-md-auto" v-for="pokemon in pokemons" :key="pokemon.id">
-        <div class="card mb-4" style="max-width: 240px;">
+        <div class="card mb-4" style="max-width: 230px;">
           <h5 class="card-header">
             <img
               :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ pokemon.numeroPokedex +'.png'"
@@ -44,7 +84,8 @@ export default {
                 alt="imagem pokemon" />
             </div>
             <div class="mt-2">
-              <button class="m-1 btn btn-outline-primary" data-bs-toggle="collapse" :data-bs-target="'#collapse'+ pokemon.id">
+              <button class="m-1 btn btn-outline-primary" data-bs-toggle="collapse"
+                :data-bs-target="'#collapse'+ pokemon.id">
                 Mais
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
                   viewBox="0 0 16 16">
@@ -52,7 +93,7 @@ export default {
                     d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
                 </svg>
               </button>
-              <button @click="editar(ataque.id)" class="m-1 btn btn-outline-dark">
+              <button class="m-1 btn btn-outline-dark">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-pencil-fill" viewBox="0 0 16 16">
                   <path
@@ -60,7 +101,8 @@ export default {
                 </svg>
               </button>
 
-              <button type="button" class="m-1 btn btn-outline-danger" @click="selecionar(ataque)">
+              <button type="button" class="m-1 btn btn-outline-danger" data-bs-toggle="modal"
+                data-bs-target="#modalConfimacaoExclusao" @click="selecionarPokemon(pokemon)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-trash-fill" viewBox="0 0 16 16">
                   <path
@@ -75,6 +117,28 @@ export default {
                   <p class="card-text"> Felicidade: {{pokemon.felicidade}} </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="modalConfimacaoExclusao" tabindex="-1" aria-labelledby="modalConfimacaoExclusao"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Confirmação de exclusão</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Deseja remover o Pokemon <strong> #{{this.pokemonSelecionado.id}} - {{this.pokemonSelecionado.nome}}
+              </strong>?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button @click="removerPokemonSelecionado()" class="btn btn-dark" data-bs-dismiss="modal">
+                Remover
+              </button>
             </div>
           </div>
         </div>
