@@ -14,6 +14,9 @@ export default {
             tipos: [],
             ataques: [],
             salvo: false,
+            ataqueSelecionado: 0,
+            quantidade: 0,
+            ataquesSelecionados: []
         }
     },
     methods: {
@@ -37,8 +40,17 @@ export default {
                     console.log(erro);
                 })
         },
+
+        adicionar() {
+            if (this.ataquesSelecionados.length < 4 && this.ataqueSelecionado != 0) {
+                this.ataquesSelecionados.push(this.ataqueSelecionado);
+                this.ataqueSelecionado = 0;
+            }
+        },
+
         salvar() {
             this.pokemonRequest.tiposIds = [...new Set(this.pokemonRequest.tiposIds.filter(tipoId => tipoId != 0))];
+            this.pokemonRequest.ataquesIds = [...new Set(this.ataquesSelecionados.filter(ataque => ataque.id != 0))];
 
             console.log(this.pokemonRequest.tiposIds);
 
@@ -51,6 +63,9 @@ export default {
                     console.log(erro);
                     this.salvo = false;
                 })
+        },
+        remover(index) {
+            this.ataquesSelecionados.splice(index, 1);
         }
     },
     mounted() {
@@ -83,7 +98,8 @@ export default {
                         </div>
                         <div class="col-8">
                             <label for="numeroPokedex" class="form-label">Nº:</label>
-                            <input type="number" class="form-control" id="numeroPokedex" required v-model="pokemonRequest.numeroPokedex">
+                            <input type="number" class="form-control" id="numeroPokedex" required
+                                v-model="pokemonRequest.numeroPokedex">
 
                             <label for="nome" class="form-label">Nome:</label>
                             <input type="text" class="form-control" id="nome" required v-model="pokemonRequest.nome">
@@ -166,44 +182,43 @@ export default {
                             </select>
                         </div>
                     </div>
-                    <fieldset class="row m-0 mt-4 mb-4 p-3 border border-secondary rounded">
-                        <div class="col-form-label col-sm-2 pt-0">
-                            <legend>Ataques</legend>
-                            <label for="quantidadeAtaque" class="form-label"> Quantidade:</label>
-                            <input type="number" name="quantidadeAtaque" id="quantidadeAtaque" class="form-control"
-                                min="1" max="4" value="1">
+                    <fieldset class="row m-0 mt-4 mb-4 pt-3 pb-3 border border-secondary rounded">
+                        <label for="ataque1" class="form-label"> Ataques:</label>
+                        <div class="row">
+                            <div class="col-10">
+                                <select id="ataque1" class="form-select" v-model="ataqueSelecionado">
+                                    <option value="0"> Nenhum </option>
+                                    <option v-for="ataque in ataques" :key="ataque.id" :value="ataque">
+                                        {{ataque.nome}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <button @click.prevent="adicionar" class="btn btn-success col-12">Adicionar</button>
+                            </div>
                         </div>
-                        <div class="col-sm-10">
-                            <label for="ataque1" class="form-label"> Ataque 1:</label>
-                            <select id="ataque1" class="form-select">
-                                <option value="0"> Nenhum </option>
-                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
-                                    {{ataque.nome}}
-                                </option>
-                            </select>
-                            <label for="ataque2" class="form-label"> Ataque 2:</label>
-                            <select id="ataque2" class="form-select">
-                                <option value="0"> Nenhum </option>
-                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
-                                    {{ataque.nome}}
-                                </option>
-                            </select>
-                            <label for="ataque3" class="form-label"> Ataque 3:</label>
-                            <select id="ataque3" class="form-select">
-                                <option value="0"> Nenhum </option>
-                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
-                                    {{ataque.nome}}
-                                </option>
-                            </select>
-                            <label for="ataque4" class="form-label"> Ataque 4:</label>
-                            <select id="ataque4" class="form-select">
-                                <option value="0"> Nenhum </option>
-                                <option v-for="ataque in ataques" :key="ataque.id" :value="ataque.id">
-                                    {{ataque.nome}}
-                                </option>
-                            </select>
-                        </div>
+                        <div class="mt-2 row">
+                            <div class="card p-2 m-2" v-for="(ataque, index) in ataquesSelecionados"
+                                style="max-width: 240px;">
+                                <div class="card-body">
+                                    <h5 class="card-title"> {{ataque.nome}} </h5>
+                                    <p class="card-text"> Força: {{ataque.forca}} </p>
+                                    <p class="card-text"> Tipo: {{ataque.tipo.nome}} </p>
+                                    <p class="card-text"> Categoria: {{ataque.categoria}} </p>
+                                    <button @click.prevent="remover(index)" class="btn btn-outline-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                            <path
+                                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                        </svg>
+                                        Remover
+                                    </button>
+                                </div>
 
+                            </div>
+                        </div>
                     </fieldset>
                     <div class="row text-center">
                         <div class="col-12 mt-2">
