@@ -44,25 +44,26 @@ export default {
         adicionar() {
             if (this.ataquesSelecionados.length < 4 && this.ataqueSelecionado != 0) {
                 this.ataquesSelecionados.push(this.ataqueSelecionado);
+                this.ataquesSelecionados = [...new Set(this.ataquesSelecionados)];
                 this.ataqueSelecionado = 0;
             }
         },
 
         salvar() {
             this.pokemonRequest.tiposIds = [...new Set(this.pokemonRequest.tiposIds.filter(tipoId => tipoId != 0))];
-            for (let index = 0; index < this.ataquesSelecionados.length; index++) {
-                this.pokemonRequest.ataquesIds[index] = this.ataquesSelecionados[index].id;
-            }
+            this.pokemonRequest.ataquesIds = this.ataquesSelecionados.map(ataque => ataque.id);
 
             PokemonDataService.criar(this.pokemonRequest)
                 .then(resposta => {
                     this.pokemonResponse = resposta;
                     this.salvo = true;
+                    this.pokemonRequest = new PokemonRequest();
                 })
                 .catch(erro => {
                     console.log(erro);
                     this.salvo = false;
                 })
+                
         },
         remover(index) {
             this.ataquesSelecionados.splice(index, 1);
@@ -85,26 +86,27 @@ export default {
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Pokemon </h1>
                 <form class="g-3">
+                    <div class="card" style="width: 140px; height: 150px;">
+                        <img :alt="'Imagem do Pokemon' + pokemonRequest.nome" :title="pokemonRequest.nome"
+                            class="card-img" :src="
+                              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+                              pokemonRequest.numeroPokedex +
+                              '.png' 
+                            " v-if="pokemonRequest.numeroPokedex > 0" />
+                    </div>
                     <div class="row">
-                        <div class="col-4">
-                            <div class="card" style="width: 140px; height: 150px;">
-                                <img :alt="'Imagem do Pokemon' + pokemonRequest.nome" :title="pokemonRequest.nome"
-                                    class="card-img" :src="
-                                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
-                                      pokemonRequest.numeroPokedex +
-                                      '.png' 
-                                    " v-if="pokemonRequest.numeroPokedex > 0" />
-                            </div>
-                        </div>
-                        <div class="col-8">
+                        <div class="col-3">
                             <label for="numeroPokedex" class="form-label">Nº:</label>
                             <input type="number" class="form-control" id="numeroPokedex" required
                                 v-model="pokemonRequest.numeroPokedex">
+                        </div>
 
+                        <div class="col-9">
                             <label for="nome" class="form-label">Nome:</label>
                             <input type="text" class="form-control" id="nome" required v-model="pokemonRequest.nome">
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-6">
                             <label for="nível" class="form-label">Nível:</label>
@@ -194,29 +196,39 @@ export default {
                                 </select>
                             </div>
                             <div class="col-2">
-                                <button @click.prevent="adicionar" class="btn btn-success col-12">Adicionar</button>
+                                <button @click.prevent="adicionar" class="btn border-dark">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                        <div class="mt-2 row">
-                            <div class="card p-2 m-2" v-for="(ataque, index) in ataquesSelecionados"
-                                style="max-width: 240px;">
-                                <div class="card-body">
-                                    <h5 class="card-title"> {{ataque.nome}} </h5>
-                                    <p class="card-text"> Força: {{ataque.forca}} </p>
-                                    <p class="card-text"> Tipo: {{ataque.tipo.nome}} </p>
-                                    <p class="card-text"> Categoria: {{ataque.categoria}} </p>
-                                    <button @click.prevent="remover(index)" class="btn btn-outline-danger">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                            <path
-                                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                        </svg>
-                                        Remover
-                                    </button>
+                        <div class="container">
+                            <div class="mt-2 row">
+                                <div class="col-3 card m-2 h-100" v-for="(ataque, index) in ataquesSelecionados"
+                                    style="width:230px">
+                                    <div class="card-header row align-items-center">
+                                        <div class="col-10">
+                                            <h5 class="card-title"> {{ataque.nome}} </h5>
+                                        </div>
+                                        <div class="col-2">
+                                            <button @click.prevent="remover(index)" class="btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text"> Força: {{ataque.forca}} </p>
+                                        <p class="card-text"> Tipo: {{ataque.tipo.nome}} </p>
+                                        <p class="card-text"> Categoria: {{ataque.categoria}} </p>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </fieldset>
