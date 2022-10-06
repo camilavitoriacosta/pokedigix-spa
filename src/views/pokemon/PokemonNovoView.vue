@@ -54,8 +54,6 @@ export default {
                 this.pokemonRequest.ataquesIds[index] = this.ataquesSelecionados[index].id;
             }
 
-            console.log(this.pokemonRequest.ataquesIds);
-
             PokemonDataService.criar(this.pokemonRequest)
                 .then(resposta => {
                     this.pokemonResponse = resposta;

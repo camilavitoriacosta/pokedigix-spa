@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PokemonListaView from '../views/pokemon/PokemonListaView.vue'
+import TreinadorListaView from '../views/treinador/TreinadorListaView.vue'
 import PokemonNovoView from '../views/pokemon/PokemonNovoView.vue'
 import TipoNovoView from '../views/tipo/TipoNovoView.vue'
 import TipoEditarView from '../views/tipo/TipoEditarView.vue'
@@ -15,6 +16,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: PokemonListaView
+    },
+    {
+      path: '/treinadores/lista',
+      name: 'treinadores-lista',
+      component: TreinadorListaView
     },
     {
       path: '/pokemons/lista',
