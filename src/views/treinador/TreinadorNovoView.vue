@@ -3,6 +3,9 @@ import TreinadorRequest from '../../models/TreinadorRequest';
 import Endereco from '../../models/Endereco';
 import PokemonDataService from '../../services/PokemonDataService';
 import EnderecoDataService from '../../services/EnderecoDataService';
+import PokemonRequest from '../../models/PokemonRequest';
+import TreinadorDataService from '../../services/TreinadorDataService';
+import TipoDataService from '../../services/TipoDataService';
 
 export default {
     name: 'treinadores-novo',
@@ -12,7 +15,28 @@ export default {
             salvo: false,
             pokemons: [],
             enderecos: [],
-            endereco: new Endereco()
+            endereco: new Endereco(),
+            pokemonsIniciais: [
+                {
+                    "nome": "Totodile",
+                    "tipo": "Agua",
+                    "numeroPokedex": 158
+                },
+                {
+                    "nome": "Cyndaquil",
+                    "tipo": "Fogo",
+                    "numeroPokedex": 155
+                },
+                {
+                    "nome": "Chikorita",
+                    "tipo": "Grama",
+                    "numeroPokedex": 152
+                },
+            ],
+            pokemonInicialSelecionado: {
+                "nome": "Cyndaquil",
+                "numeroPokedex": 155
+            }
         }
     },
 
@@ -54,13 +78,39 @@ export default {
         },
 
         salvar() {
+            const pokemon = new PokemonRequest();
+            pokemon.numeroPokedex = this.pokemonInicialSelecionado.numeroPokedex;
+            pokemon.nome = this.pokemonInicialSelecionado.nome;
+            pokemon.altura = 1;
+            pokemon.peso = 2.0;
+            pokemon.felicidade = 80;
+            pokemon.nivel = 10;
+            
+            PokemonDataService.criar(pokemon)
+                .then(resposta => {
+                    this.treinadorRequest.idPrimeiroPokemon = resposta.id;
+                    console.log(this.treinadorRequest);
+                    TreinadorDataService.criar(this.treinadorRequest)
+                        .then(resposta => {
+                            this.treinadorRequest.id = resposta.id;
+                            this.salvo = true;
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                        })
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    this.salvo = false;
+                })
+        },
 
-        }
     },
 
     mounted() {
         this.carregarPokemon();
         this.carregarEndereco();
+        this.pokemonInicialSelecionado.numeroPokedex = this.pokemonsIniciais[1].numeroPokedex;
     }
 }
 </script>
@@ -69,7 +119,7 @@ export default {
     <div class="container  mt-4">
         <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
             <span>O Treinador foi salvo com sucesso!</span>
-            <span> Treinador { id: {{treinador.id}}, nome: {{treinador.nome}} } </span>
+            <span> Treinador { nome: {{treinadorRequest.nome}} } </span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div class="card">
@@ -80,20 +130,33 @@ export default {
                         <label for="nome" class="form-label">Nome do treinador</label>
                         <input type="text" required class="form-control" v-model="treinadorRequest.nome" id="nome" />
                     </div>
-                    <div class="row">
+                    <div class="row  justify-content-center">
                         <label for="pokemon" class="form-label">Pokemon inicial</label>
-                        <select id="pokemon" class="form-select form-select-lg mb-3"
+                        <!-- <select id="pokemon" class="form-select form-select-lg mb-3"
                             aria-label=".form-select-lg example" v-model="treinadorRequest.idPrimeiroPokemon">
                             <option v-for="pokemon in pokemons" :key="pokemon.id" :value="pokemon.id">
                                 {{pokemon.nome}} | {{pokemon.nivel}}
                             </option>
-                        </select>
+                        </select> -->
+                        <div class="col-2" v-for="pokemon in pokemonsIniciais">
+                            <input type="radio" class="btn-check" name="options-outlined" :id="pokemon.numeroPokedex"
+                                autocomplete="off" :value="pokemon.numeroPokedex"
+                                v-model="pokemonInicialSelecionado.numeroPokedex">
+                            <label class="btn btn-outline-dark row" :for="pokemon.numeroPokedex">
+                                <p>{{pokemon.nome}}</p>
+                                <img class="img-fluid rounded-start" style="max-width: 140px;"
+                                    :id="'imgPokemon'+ pokemon.id"
+                                    :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ pokemon.numeroPokedex +'.png'"
+                                    alt="imagem pokemon" />
+                            </label>
+                        </div>
                     </div>
                     <div class="container">
                         <div class="row">
-                            <div class="col-3" v-for="endereco in enderecos" :key="endereco.id">
+                            <label for="endereco" class="form-label">Endereço</label>
+                            <div class="col-3 mb-2" v-for="endereco in enderecos" :key="endereco.id">
                                 <input type="radio" class="btn-check" name="options" :id="endereco.id"
-                                    autocomplete="off">
+                                    :value="endereco.id" autocomplete="off" v-model="treinadorRequest.idEndereco">
 
                                 <label class="btn" :for="endereco.id">
                                     <div class="card" style="width:200px; height:150px;">
@@ -103,7 +166,6 @@ export default {
                                         </div>
                                     </div>
                                 </label>
-
                             </div>
                             <div class="col-2">
                                 <div class="card align-items-center" style="width:200px; height:150px;">
