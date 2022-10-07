@@ -1,6 +1,7 @@
 <script>
 import TipoDataService from '../../services/TipoDataService'
 import Tipo from '../../models/Tipo'
+import MensagemSucesso from '../../components/MensagemSucesso.vue'
 
 export default {
     name: 'tipos-novo',
@@ -9,6 +10,9 @@ export default {
             tipo: new Tipo(),
             salvo: false,
         }
+    },
+    components: {
+        MensagemSucesso,
     },
     methods: {
         salvar() {
@@ -28,11 +32,10 @@ export default {
 
 <template>
     <div class="container  mt-4">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
+        <MensagemSucesso :salvo="salvo">
             <span>O Tipo foi salvo com sucesso!</span>
             <span> Tipo { id: {{tipo.id}}, nome: {{tipo.nome}} } </span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        </MensagemSucesso>
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Tipo </h1>

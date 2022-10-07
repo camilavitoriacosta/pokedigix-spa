@@ -3,9 +3,10 @@ import AtaqueDataService from "../../services/AtaqueDataService"
 import TipoDataService from "../../services/TipoDataService"
 import AtaqueRequest from "../../models/AtaqueRequest"
 import AtaqueResponse from "../../models/AtaqueResponse"
+import MensagemSucesso from "../../components/MensagemSucesso.vue"
 
 export default {
-    name: 'ataques-novo',
+    name: "ataques-novo",
     data() {
         return {
             ataqueRequest: new AtaqueRequest(),
@@ -30,7 +31,10 @@ export default {
                     nomeBanco: "EFEITO"
                 }
             ]
-        }
+        };
+    },
+    components:{
+        MensagemSucesso
     },
     methods: {
         carregarTipos() {
@@ -41,9 +45,8 @@ export default {
                 })
                 .catch(erro => {
                     console.log(erro);
-                })
+                });
         },
-
         escolherCategoria() {
             if (this.ataqueRequest.categoria == "EFEITO") {
                 this.desabilitarForca = true;
@@ -52,7 +55,6 @@ export default {
                 this.desabilitarForca = false;
             }
         },
-
         salvar() {
             AtaqueDataService.criar(this.ataqueRequest)
                 .then(resposta => {
@@ -63,24 +65,23 @@ export default {
                 .catch(erro => {
                     console.log(erro);
                     this.salvo = false;
-                })
+                });
         }
     },
-
     mounted() {
         this.ataqueRequest.categoria = this.categorias[0].nomeBanco;
         this.carregarTipos();
-    }
+    },
+    components: { MensagemSucesso }
 }
 </script>
 
 <template>
     <div class="container  mt-4">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
+        <MensagemSucesso :salvo="salvo">
             <span>O Ataque foi salvo com sucesso!</span>
             <span> Ataque { id: {{ataqueResponse.id}}, nome: {{ataqueResponse.nome}} } </span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        </MensagemSucesso>
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Ataque </h1>

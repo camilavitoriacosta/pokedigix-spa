@@ -5,7 +5,7 @@ import PokemonDataService from '../../services/PokemonDataService';
 import EnderecoDataService from '../../services/EnderecoDataService';
 import PokemonRequest from '../../models/PokemonRequest';
 import TreinadorDataService from '../../services/TreinadorDataService';
-import TipoDataService from '../../services/TipoDataService';
+import MensagemSucesso from '../../components/MensagemSucesso.vue';
 
 export default {
     name: 'treinadores-novo',
@@ -38,6 +38,10 @@ export default {
                 "numeroPokedex": 155
             }
         }
+    },
+
+    components: {
+        MensagemSucesso,
     },
 
     methods: {
@@ -85,25 +89,27 @@ export default {
             pokemon.peso = 2.0;
             pokemon.felicidade = 80;
             pokemon.nivel = 10;
-            
+
             PokemonDataService.criar(pokemon)
                 .then(resposta => {
                     this.treinadorRequest.idPrimeiroPokemon = resposta.id;
-                    console.log(this.treinadorRequest);
-                    TreinadorDataService.criar(this.treinadorRequest)
-                        .then(resposta => {
-                            this.treinadorRequest.id = resposta.id;
-                            this.salvo = true;
-                        })
-                        .catch(erro => {
-                            console.log(erro);
-                        })
+                    this.salvarTreinador();
                 })
                 .catch(erro => {
                     console.log(erro);
                     this.salvo = false;
                 })
         },
+        salvarTreinador() {
+            TreinadorDataService.criar(this.treinadorRequest)
+                .then(resposta => {
+                    this.treinadorRequest.id = resposta.id;
+                    this.salvo = true;
+                })
+                .catch(erro => {
+                    console.log(erro);
+                })
+        }
 
     },
 
@@ -117,11 +123,11 @@ export default {
     
 <template>
     <div class="container  mt-4">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
+        <MensagemSucesso :salvo="salvo">
             <span>O Treinador foi salvo com sucesso!</span>
             <span> Treinador { nome: {{treinadorRequest.nome}} } </span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        </MensagemSucesso>
+
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Treinador </h1>
@@ -132,12 +138,6 @@ export default {
                     </div>
                     <div class="row  justify-content-center">
                         <label for="pokemon" class="form-label">Pokemon inicial</label>
-                        <!-- <select id="pokemon" class="form-select form-select-lg mb-3"
-                            aria-label=".form-select-lg example" v-model="treinadorRequest.idPrimeiroPokemon">
-                            <option v-for="pokemon in pokemons" :key="pokemon.id" :value="pokemon.id">
-                                {{pokemon.nome}} | {{pokemon.nivel}}
-                            </option>
-                        </select> -->
                         <div class="col-2" v-for="pokemon in pokemonsIniciais">
                             <input type="radio" class="btn-check" name="options-outlined" :id="pokemon.numeroPokedex"
                                 autocomplete="off" :value="pokemon.numeroPokedex"
