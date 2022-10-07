@@ -1,6 +1,7 @@
 <script>
 import PokemonDataService from '../../services/PokemonDataService';
 import Loading from "vue-loading-overlay";
+import PokemonResponse from '../../models/PokemonResponse';
 
 export default {
   name: "pokemons-lista",
@@ -8,6 +9,7 @@ export default {
     return {
       pokemons: [],
       pokemonSelecionado: this.inicializarPokemon(),
+      pokemonDetalhar: new PokemonResponse(),
       isLoading: false,
     };
   },
@@ -39,6 +41,10 @@ export default {
       this.pokemonSelecionado.nome = pokemon.nome;
     },
 
+    selecionarPokemonDetalhar(pokemon) {
+      this.pokemonDetalhar = pokemon;
+    },
+
     removerPokemonSelecionado() {
       this.isLoading = true;
       const id = this.pokemonSelecionado.id;
@@ -60,7 +66,7 @@ export default {
         img.setAttribute('src', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/' + pokemon.numeroPokedex + '.png')
         img.setAttribute('shiny', true);
       }
-      else if(img.getAttribute('shiny') == "true") {
+      else if (img.getAttribute('shiny') == "true") {
         img.setAttribute('src', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/' + pokemon.numeroPokedex + '.png')
         img.setAttribute('shiny', false);
       }
@@ -99,14 +105,9 @@ export default {
               </button>
             </div>
             <div class="mt-2">
-              <button class="m-1 btn btn-outline-primary" data-bs-toggle="collapse"
-                :data-bs-target="'#collapse'+ pokemon.id">
-                Mais
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
-                  viewBox="0 0 16 16">
-                  <path fill-rule="evenodd"
-                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
-                </svg>
+              <button class="m-1 btn btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#modalInformacoesPokemon" @click="selecionarPokemonDetalhar(pokemon)">
+                Detalhes
               </button>
               <button class="m-1 btn btn-outline-dark">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -124,14 +125,6 @@ export default {
                     d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                 </svg>
               </button>
-
-              <div class="collapse" :id="'collapse'+ pokemon.id">
-                <div class="card card-body">
-                  <p class="card-text"> Peso: {{pokemon.peso}} </p>
-                  <p class="card-text"> Altura: {{pokemon.altura}} </p>
-                  <p class="card-text"> Felicidade: {{pokemon.felicidade}} </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -154,6 +147,51 @@ export default {
               <button @click="removerPokemonSelecionado()" class="btn btn-dark" data-bs-dismiss="modal">
                 Remover
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="modalInformacoesPokemon" tabindex="-1" aria-labelledby="modalInformacoesPokemon"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel"> Nº{{pokemonDetalhar.numeroPokedex}} -
+                {{pokemonDetalhar.nome}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card  mb-2">
+                <div class="card-header">
+                  <h5>Infomações</h5>
+                </div>
+                <div class="card-body">
+                  <img
+                    :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ pokemonDetalhar.numeroPokedex +'.png'"
+                    alt="imagem pokemon" />
+                  <p class="card-text"> Peso: {{pokemonDetalhar.peso}} </p>
+                  <p class="card-text"> Altura: {{pokemonDetalhar.altura}} </p>
+                  <p class="card-text"> Felicidade: {{pokemonDetalhar.felicidade}} </p>
+                </div>
+              </div>
+              <div class="card mb-2">
+                <div class="card-header">
+                  <h5>Ataques</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-text" v-for="ataque in pokemonDetalhar.ataques"> {{ataque.nome}} </p>
+                </div>
+              </div>
+              <div class="card  mb-2">
+                <div class="card-header">
+                  <h5>Tipos</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-text" v-for="tipo in pokemonDetalhar.tipos"> {{tipo.nome}} </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
