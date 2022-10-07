@@ -6,6 +6,7 @@ import EnderecoDataService from '../../services/EnderecoDataService';
 import PokemonRequest from '../../models/PokemonRequest';
 import TreinadorDataService from '../../services/TreinadorDataService';
 import MensagemSucesso from '../../components/MensagemSucesso.vue';
+import TipoDataService from '../../services/TipoDataService';
 
 export default {
     name: 'treinadores-novo',
@@ -33,9 +34,11 @@ export default {
                     "numeroPokedex": 152
                 },
             ],
+
             pokemonInicialSelecionado: {
                 "nome": "Cyndaquil",
-                "numeroPokedex": 155
+                "numeroPokedex": 155,
+                "tipo": "Fogo"
             }
         }
     },
@@ -90,6 +93,17 @@ export default {
             pokemon.felicidade = 80;
             pokemon.nivel = 10;
 
+            TipoDataService.buscarPorTermo(this.pokemonInicialSelecionado.tipo)
+                .then(resposta => {
+                    pokemon.tiposIds[0] = resposta[0].id
+                    this.salvarPokemonInicial(pokemon);
+                })
+                .catch(erro => {
+                    console.log(erro);
+                })
+        },
+
+        salvarPokemonInicial(pokemon) {
             PokemonDataService.criar(pokemon)
                 .then(resposta => {
                     this.treinadorRequest.idPrimeiroPokemon = resposta.id;
@@ -100,6 +114,7 @@ export default {
                     this.salvo = false;
                 })
         },
+
         salvarTreinador() {
             TreinadorDataService.criar(this.treinadorRequest)
                 .then(resposta => {
@@ -138,10 +153,9 @@ export default {
                     </div>
                     <div class="row  justify-content-center">
                         <label for="pokemon" class="form-label">Pokemon inicial</label>
-                        <div class="col-2" v-for="pokemon in pokemonsIniciais">
+                        <div class="col-md-auto m-2" v-for="pokemon in pokemonsIniciais">
                             <input type="radio" class="btn-check" name="options-outlined" :id="pokemon.numeroPokedex"
-                                autocomplete="off" :value="pokemon.numeroPokedex"
-                                v-model="pokemonInicialSelecionado.numeroPokedex">
+                                autocomplete="off" :value="pokemon" v-model="pokemonInicialSelecionado">
                             <label class="btn btn-outline-dark row" :for="pokemon.numeroPokedex">
                                 <p>{{pokemon.nome}}</p>
                                 <img class="img-fluid rounded-start" style="max-width: 140px;"
@@ -154,7 +168,7 @@ export default {
                     <div class="container">
                         <div class="row">
                             <label for="endereco" class="form-label">Endereço</label>
-                            <div class="col-3 mb-2" v-for="endereco in enderecos" :key="endereco.id">
+                            <div class="col-md-auto mb-2" v-for="endereco in enderecos" :key="endereco.id">
                                 <input type="radio" class="btn-check" name="options" :id="endereco.id"
                                     :value="endereco.id" autocomplete="off" v-model="treinadorRequest.idEndereco">
 
@@ -167,7 +181,7 @@ export default {
                                     </div>
                                 </label>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-auto mb-2">
                                 <div class="card align-items-center" style="width:200px; height:150px;">
                                     <button type="button" class="btn btn-outline-dark h-100 w-100"
                                         data-bs-toggle="modal" data-bs-target="#enderecoNovoModal">
@@ -217,3 +231,9 @@ export default {
         </div>
     </div>
 </template>
+
+<style>
+.border-box {
+    box-sizing: border-box;
+}
+</style>

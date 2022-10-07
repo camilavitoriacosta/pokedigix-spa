@@ -40,7 +40,7 @@ export default {
 
         <div class="container-lg text-center row">
             <div class="col-md-auto" v-for="treinador in treinadores" :key="treinador.id">
-                <div class="card mb-4" style="max-width: 230px;">
+                <div class="card mb-4 h-100 w-100" style="width: 230px;">
                     <h5 class="card-header">
                         {{treinador.nome}}
                     </h5>

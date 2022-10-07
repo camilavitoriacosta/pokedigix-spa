@@ -4,9 +4,10 @@ import PokemonRequest from '../../models/PokemonRequest';
 import PokemonResponse from '../../models/PokemonResponse';
 import TipoDataService from "../../services/TipoDataService"
 import AtaqueDataService from "../../services/AtaqueDataService"
+import MensagemSucesso from '../../components/MensagemSucesso.vue';
 
 export default {
-    name: 'pokemons-novo',
+    name: "pokemons-novo",
     data() {
         return {
             pokemonRequest: new PokemonRequest(),
@@ -17,8 +18,13 @@ export default {
             ataqueSelecionado: 0,
             quantidade: 0,
             ataquesSelecionados: []
-        }
+        };
     },
+
+    components: {
+        MensagemSucesso
+    },
+
     methods: {
         carregarTipos() {
             TipoDataService.buscarTodos()
@@ -29,7 +35,7 @@ export default {
                 })
                 .catch(erro => {
                     console.log(erro);
-                })
+                });
         },
         carregarAtaques() {
             AtaqueDataService.buscarTodos()
@@ -38,9 +44,8 @@ export default {
                 })
                 .catch(erro => {
                     console.log(erro);
-                })
+                });
         },
-
         adicionar() {
             if (this.ataquesSelecionados.length < 4 && this.ataqueSelecionado != 0) {
                 this.ataquesSelecionados.push(this.ataqueSelecionado);
@@ -48,11 +53,9 @@ export default {
                 this.ataqueSelecionado = 0;
             }
         },
-
         salvar() {
             this.pokemonRequest.tiposIds = [...new Set(this.pokemonRequest.tiposIds.filter(tipoId => tipoId != 0))];
             this.pokemonRequest.ataquesIds = this.ataquesSelecionados.map(ataque => ataque.id);
-
             PokemonDataService.criar(this.pokemonRequest)
                 .then(resposta => {
                     this.pokemonResponse = resposta;
@@ -62,8 +65,7 @@ export default {
                 .catch(erro => {
                     console.log(erro);
                     this.salvo = false;
-                })
-                
+                });
         },
         remover(index) {
             this.ataquesSelecionados.splice(index, 1);
@@ -72,16 +74,15 @@ export default {
     mounted() {
         this.carregarTipos();
         this.carregarAtaques();
-    }
+    },
 }
 </script>
 <template>
     <div class="container  mt-4">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="salvo">
+        <MensagemSucesso :salvo="salvo">
             <span>O Pokemon foi salvo com sucesso!</span>
             <span> Pokemon { id: {{pokemonResponse.id}}, nome: {{ pokemonResponse.nome}} } </span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        </MensagemSucesso>
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Pokemon </h1>
