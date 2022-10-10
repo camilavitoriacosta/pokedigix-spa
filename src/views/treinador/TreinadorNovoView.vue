@@ -92,6 +92,7 @@ export default {
             pokemon.peso = 2.0;
             pokemon.felicidade = 80;
             pokemon.nivel = 10;
+            pokemon.genero = "MASCULINO";
 
             TipoDataService.buscarPorTermo(this.pokemonInicialSelecionado.tipo)
                 .then(resposta => {
