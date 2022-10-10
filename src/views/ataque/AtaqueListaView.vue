@@ -1,6 +1,8 @@
 <script>
 import AtaqueDataService from '../../services/AtaqueDataService';
-import ModalExclusao from '../../components/ModalExclusao.vue'
+import ModalExclusao from '../../components/ModalExclusao.vue';
+import Busca from '../../components/Busca.vue';
+
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -16,7 +18,8 @@ export default {
 
     components: {
         Loading,
-        ModalExclusao
+        ModalExclusao,
+        Busca
     },
 
     methods: {
@@ -82,6 +85,7 @@ export default {
         
 <template>
     <div class="container-lg mt-4">
+        <Busca></Busca>
         <h2>Lista de Ataques</h2>
         <div class="row table-responsive">
             <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />

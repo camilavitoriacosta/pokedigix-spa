@@ -3,6 +3,7 @@ import PokemonDataService from '../../services/PokemonDataService';
 import Loading from "vue-loading-overlay";
 import PokemonResponse from '../../models/PokemonResponse';
 import ModalExclusao from '../../components/ModalExclusao.vue';
+import Busca from '../../components/Busca.vue';
 
 export default {
   name: "pokemons-lista",
@@ -17,7 +18,8 @@ export default {
 
   components: {
     Loading,
-    ModalExclusao
+    ModalExclusao,
+    Busca
   },
 
   methods: {
@@ -81,11 +83,11 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="mt-4 container-lg">
+    <Busca></Busca>
     <h2>Lista de Pokemons</h2>
     <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />
-
-    <div class="container-lg text-center row">
+    <div class="text-center row">
       <div class="col-md-auto" v-for="pokemon in pokemons" :key="pokemon.id">
         <div class="card mb-4" style="max-width: 230px;">
           <h5 class="card-header">

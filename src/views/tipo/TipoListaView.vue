@@ -1,6 +1,7 @@
 <script>
 import TipoDataService from '../../services/TipoDataService';
 import ModalExclusao from '../../components/ModalExclusao.vue'
+import Busca from '../../components/Busca.vue'
 
 export default {
     name: "tipos-lista",
@@ -12,7 +13,8 @@ export default {
     },
     
     components: {
-        ModalExclusao
+        ModalExclusao,
+        Busca
     },
 
     methods: {
@@ -70,9 +72,10 @@ export default {
     
 <template>
     <div class="container-lg mt-4">
+        <Busca></Busca>
         <h2>Lista de Tipos</h2>
         <div class="row">
-            <div class="col-2 mb-2" v-for="tipo in tipos" :key="tipo.id">
+            <div class="col-auto mb-2" v-for="tipo in tipos" :key="tipo.id">
                 <div class="card border-p bg-indigo">
                     <div class="card-body">
                         <h5 class="card-title">#{{tipo.id}} {{tipo.nome}}</h5>

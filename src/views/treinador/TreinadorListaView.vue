@@ -1,6 +1,7 @@
 <script>
 import TreinadorDataService from '../../services/TreinadorDataService';
-import ModalExclusao from '../../components/ModalExclusao.vue'
+import ModalExclusao from '../../components/ModalExclusao.vue';
+import Busca from '../../components/Busca.vue';
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -16,7 +17,8 @@ export default {
 
     components: {
         Loading,
-        ModalExclusao
+        ModalExclusao,
+        Busca
     },
 
     methods: {
@@ -76,11 +78,12 @@ export default {
 </script>
     
 <template>
-    <div>
+    <div class="container-lg mt-2">
+        <Busca></Busca>
         <h2>Lista de Treinadores</h2>
         <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />
 
-        <div class="container-lg text-center row">
+        <div class="text-center row">
             <div class="col-md-auto mb-4" v-for="treinador in treinadores" :key="treinador.id">
                 <div class="card h-100" style="width: 300px;">
                     <h5 class="card-header">
