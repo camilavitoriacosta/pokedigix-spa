@@ -2,6 +2,8 @@
 import AtaqueDataService from '../../services/AtaqueDataService';
 import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
+import Paginacao from '../../components/Paginacao.vue'
+
 
 import Loading from "vue-loading-overlay";
 
@@ -19,7 +21,8 @@ export default {
     components: {
         Loading,
         ModalExclusao,
-        Busca
+        Busca,
+        Paginacao
     },
 
     methods: {
@@ -137,6 +140,7 @@ export default {
                 </tbody>
             </table>
         </div>
+        <Paginacao></Paginacao>
     </div>
 
     <!-- Modal -->

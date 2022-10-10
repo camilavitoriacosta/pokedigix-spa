@@ -2,6 +2,7 @@
 import TipoDataService from '../../services/TipoDataService';
 import ModalExclusao from '../../components/ModalExclusao.vue'
 import Busca from '../../components/Busca.vue'
+import Paginacao from '../../components/Paginacao.vue'
 
 export default {
     name: "tipos-lista",
@@ -14,7 +15,8 @@ export default {
     
     components: {
         ModalExclusao,
-        Busca
+        Paginacao,
+        Busca,
     },
 
     methods: {
@@ -101,6 +103,7 @@ export default {
                 </div>
             </div>
         </div>
+        <Paginacao></Paginacao>
     </div>
 
     <!-- Modal -->

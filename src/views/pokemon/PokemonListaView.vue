@@ -4,6 +4,8 @@ import Loading from "vue-loading-overlay";
 import PokemonResponse from '../../models/PokemonResponse';
 import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
+import Paginacao from '../../components/Paginacao.vue'
+
 
 export default {
   name: "pokemons-lista",
@@ -19,7 +21,8 @@ export default {
   components: {
     Loading,
     ModalExclusao,
-    Busca
+    Busca,
+    Paginacao
   },
 
   methods: {
@@ -187,5 +190,6 @@ export default {
         </div>
       </div>
     </div>
+    <Paginacao></Paginacao>
   </div>
 </template>
