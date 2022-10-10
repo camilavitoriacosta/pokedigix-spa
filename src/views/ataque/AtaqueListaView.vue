@@ -3,6 +3,7 @@ import AtaqueDataService from '../../services/AtaqueDataService';
 import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
 import Paginacao from '../../components/Paginacao.vue'
+import Ordenacao from '../../components/Ordenacao.vue'
 
 
 import Loading from "vue-loading-overlay";
@@ -22,7 +23,8 @@ export default {
         Loading,
         ModalExclusao,
         Busca,
-        Paginacao
+        Paginacao,
+        Ordenacao
     },
 
     methods: {
@@ -88,7 +90,14 @@ export default {
         
 <template>
     <div class="container-lg mt-4">
-        <Busca></Busca>
+        <div class="row">
+            <div class="col-9">
+                <Busca></Busca>
+            </div>
+            <div class="col-3">
+                <Ordenacao></Ordenacao>
+            </div>
+        </div>
         <h2>Lista de Ataques</h2>
         <div class="row table-responsive">
             <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />

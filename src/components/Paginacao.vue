@@ -8,13 +8,13 @@ export default {
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item disabled">
-                <a class="page-link">Previous</a>
+                <a class="page-link text-light bg-secondary">Previous</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link text-light bg-secondary" href="#">1</a></li>
+            <li class="page-item"><a class="page-link text-light bg-secondary" href="#">2</a></li>
+            <li class="page-item"><a class="page-link text-light bg-secondary" href="#">3</a></li>
             <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+                <a class="page-link text-light bg-secondary" href="#">Next</a>
             </li>
         </ul>
     </nav>

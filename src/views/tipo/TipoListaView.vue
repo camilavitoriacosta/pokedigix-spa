@@ -3,6 +3,7 @@ import TipoDataService from '../../services/TipoDataService';
 import ModalExclusao from '../../components/ModalExclusao.vue'
 import Busca from '../../components/Busca.vue'
 import Paginacao from '../../components/Paginacao.vue'
+import Ordenacao from '../../components/Ordenacao.vue'
 
 export default {
     name: "tipos-lista",
@@ -12,11 +13,12 @@ export default {
             tipoSelecionado: this.inicializarTipo(),
         };
     },
-    
+
     components: {
         ModalExclusao,
         Paginacao,
         Busca,
+        Ordenacao
     },
 
     methods: {
@@ -74,7 +76,14 @@ export default {
     
 <template>
     <div class="container-lg mt-4">
-        <Busca></Busca>
+        <div class="row">
+            <div class="col-9">
+                <Busca></Busca>
+            </div>
+            <div class="col-3">
+                <Ordenacao></Ordenacao>
+            </div>
+        </div>
         <h2>Lista de Tipos</h2>
         <div class="row">
             <div class="col-auto mb-2" v-for="tipo in tipos" :key="tipo.id">

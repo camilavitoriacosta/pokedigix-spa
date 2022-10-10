@@ -5,6 +5,7 @@ import PokemonResponse from '../../models/PokemonResponse';
 import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
 import Paginacao from '../../components/Paginacao.vue'
+import Ordenacao from '../../components/Ordenacao.vue'
 
 
 export default {
@@ -22,7 +23,8 @@ export default {
     Loading,
     ModalExclusao,
     Busca,
-    Paginacao
+    Paginacao,
+    Ordenacao
   },
 
   methods: {
@@ -87,7 +89,14 @@ export default {
 
 <template>
   <div class="mt-4 container-lg">
-    <Busca></Busca>
+    <div class="row">
+      <div class="col-9">
+        <Busca></Busca>
+      </div>
+      <div class="col-3">
+        <Ordenacao></Ordenacao>
+      </div>
+    </div>
     <h2>Lista de Pokemons</h2>
     <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />
     <div class="text-center row">
