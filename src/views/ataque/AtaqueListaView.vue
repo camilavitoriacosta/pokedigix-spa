@@ -1,5 +1,6 @@
 <script>
 import AtaqueDataService from '../../services/AtaqueDataService';
+import ModalExclusao from '../../components/ModalExclusao.vue'
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -15,6 +16,7 @@ export default {
 
     components: {
         Loading,
+        ModalExclusao
     },
 
     methods: {
@@ -134,26 +136,9 @@ export default {
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modalConfimacaoExclusao" tabindex="-1" aria-labelledby="modalConfimacaoExclusao"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmação de exclusão</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Deseja remover o Ataque <strong> #{{this.ataqueSelecionado.id}} - {{this.ataqueSelecionado.nome}}
-                    </strong>?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button @click="removerAtaqueSelecionado()" class="btn btn-dark" data-bs-dismiss="modal">
-                        Remover
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <ModalExclusao @remover="removerPokemonSelecionado">
+        <p> Deseja remover o Ataque <strong> #{{this.ataqueSelecionado.id}} - {{this.ataqueSelecionado.nome}} </strong>?
+        </p>
+    </ModalExclusao>
 </template>
         
