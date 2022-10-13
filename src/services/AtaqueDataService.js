@@ -6,8 +6,8 @@ class AtaqueDataService {
         return resposta.data;
     }
 
-    async buscarPorTermo(termo) {
-        let resposta = await http.get('/ataques?termo=' + termo);
+    async buscarTodosPaginadoOrdenado(pagina, tamanho, campoOrdenacao, direcao, nome) {
+        let resposta = await http.get(`/ataques?pagina=${pagina}&tamanho=${tamanho}&campoOrdenacao=${campoOrdenacao}&direcao=${direcao}&termo=${nome}`);
         return resposta.data;
     }
 

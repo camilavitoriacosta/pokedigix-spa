@@ -1,9 +1,9 @@
 <script>
-import AtaqueDataService from '../../services/AtaqueDataService';
-import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
-import Paginacao from '../../components/Paginacao.vue'
-import Ordenacao from '../../components/Ordenacao.vue'
+import ModalExclusao from '../../components/ModalExclusao.vue';
+import Ordenacao from '../../components/Ordenacao.vue';
+import Paginacao from '../../components/Paginacao.vue';
+import AtaqueDataService from '../../services/AtaqueDataService';
 
 
 import Loading from "vue-loading-overlay";
@@ -16,6 +16,14 @@ export default {
             ataqueSelecionado: this.inicializarAtaque(),
             isLoading: false,
             fullPage: false,
+            pagina: 0,
+            tamanho: 4,
+            ordenacao: { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
+            termo: "",
+            opcoes: [
+                { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
+                { titulo: "Nome Z-A", direcao: "DESC", campo: "nome" },
+            ]
         }
     },
 
@@ -30,7 +38,7 @@ export default {
     methods: {
         buscarAtaques() {
             this.isLoading = true;
-            AtaqueDataService.buscarTodos()
+            AtaqueDataService.buscarTodosPaginadoOrdenado(this.pagina, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
                 .then(resposta => {
                     this.ataques = resposta;
                     this.isLoading = false;
@@ -90,12 +98,13 @@ export default {
         
 <template>
     <div class="container-lg mt-4">
-        <div class="row">
-            <div class="col-9">
-                <Busca></Busca>
+        <div class="row justify-content-end">
+            <div class="col-2">
+                <Ordenacao v-model="ordenacao" :opcoes="opcoes" :ordenacao="ordenacao" @ordenar="buscarAtaques">
+                </Ordenacao>
             </div>
-            <div class="col-3">
-                <Ordenacao></Ordenacao>
+            <div class="col-4">
+                <Busca></Busca>
             </div>
         </div>
         <h2>Lista de Ataques</h2>
