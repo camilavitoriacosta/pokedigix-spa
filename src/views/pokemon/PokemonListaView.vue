@@ -16,6 +16,14 @@ export default {
       pokemonSelecionado: this.inicializarPokemon(),
       pokemonDetalhar: new PokemonResponse(),
       isLoading: false,
+      pagina: 0,
+      tamanho: 4,
+      ordenacao: { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
+      termo: "",
+      opcoes: [
+        { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
+        { titulo: "Nome Z-A", direcao: "DESC", campo: "nome" },
+      ]
     };
   },
 
@@ -29,7 +37,7 @@ export default {
 
   methods: {
     buscarPokemons() {
-      PokemonDataService.buscarTodos()
+      PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
         .then(resposta => {
           this.pokemons = resposta;
         })
@@ -89,12 +97,12 @@ export default {
 
 <template>
   <div class="mt-4 container-lg">
-    <div class="row">
-      <div class="col-9">
-        <Busca></Busca>
+    <div class="row justify-content-end">
+      <div class="col-2">
+        <Ordenacao v-model="ordenacao" :opcoes="opcoes" :ordenacao="ordenacao" @ordenar="buscarPokemons"></Ordenacao>
       </div>
-      <div class="col-3">
-        <Ordenacao></Ordenacao>
+      <div class="col-4">
+        <Busca></Busca>
       </div>
     </div>
     <h2>Lista de Pokemons</h2>
