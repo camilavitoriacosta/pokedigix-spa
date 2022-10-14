@@ -3,14 +3,7 @@ export default {
     name: "ordenacao",
     props: {
         ordenacao: Object,
-        opcoes: {
-            required: false,
-            default: [
-                { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
-                { titulo: "Nome Z-A", direcao: "DESC", campo: "nome" },
-            ],
-            type: Array
-        }
+        opcoes: Array
     },
     methods: {
         ordenar() {

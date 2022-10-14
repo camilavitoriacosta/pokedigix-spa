@@ -83,12 +83,12 @@ export default {
     
 <template>
     <div class="container-lg mt-2">
-        <div class="row">
-            <div class="col-9">
-                <Busca></Busca>
-            </div>
-            <div class="col-3">
+        <div class="row justify-content-end">
+            <div class="col-2">
                 <Ordenacao></Ordenacao>
+            </div>
+            <div class="col-4">
+                <Busca></Busca>
             </div>
         </div>
         <h2>Lista de Treinadores</h2>

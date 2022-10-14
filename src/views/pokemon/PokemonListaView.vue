@@ -1,11 +1,11 @@
 <script>
-import PokemonDataService from '../../services/PokemonDataService';
 import Loading from "vue-loading-overlay";
-import PokemonResponse from '../../models/PokemonResponse';
-import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
-import Paginacao from '../../components/Paginacao.vue'
-import Ordenacao from '../../components/Ordenacao.vue'
+import ModalExclusao from '../../components/ModalExclusao.vue';
+import Ordenacao from '../../components/Ordenacao.vue';
+import Paginacao from '../../components/Paginacao.vue';
+import PokemonResponse from '../../models/PokemonResponse';
+import PokemonDataService from '../../services/PokemonDataService';
 
 
 export default {
@@ -66,7 +66,7 @@ export default {
       this.isLoading = true;
       const id = this.pokemonSelecionado.id;
       PokemonDataService.removerPorId(id)
-        .then(resposta => {
+        .then(() => {
           this.pokemons = this.pokemons.filter(pokemon => pokemon.id != id);
           this.isLoading = false;
         })
@@ -77,6 +77,12 @@ export default {
 
       this.pokemonSelecionado = this.inicializarPokemon();
     },
+
+    pesquisar(texto) {
+      this.termo = texto;
+      this.buscarPokemons();
+    },
+
     shiny(pokemon) {
       const img = document.getElementById("imgPokemon" + pokemon.id);
       if (img.getAttribute('shiny') == "false") {
@@ -102,7 +108,7 @@ export default {
         <Ordenacao v-model="ordenacao" :opcoes="opcoes" :ordenacao="ordenacao" @ordenar="buscarPokemons"></Ordenacao>
       </div>
       <div class="col-4">
-        <Busca></Busca>
+        <Busca :texto="termo" :pesquisar="pesquisar"></Busca>
       </div>
     </div>
     <h2>Lista de Pokemons</h2>
