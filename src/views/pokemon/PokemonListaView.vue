@@ -16,8 +16,10 @@ export default {
       pokemonSelecionado: this.inicializarPokemon(),
       pokemonDetalhar: new PokemonResponse(),
       isLoading: false,
-      pagina: 0,
-      tamanho: 4,
+      pagina: 1,
+      quantidadeItensPorPagina: 5, 
+      totalPaginas: 4,
+      quantidadeItens: 2,
       ordenacao: { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
       termo: "",
       opcoes: [
@@ -37,9 +39,10 @@ export default {
 
   methods: {
     buscarPokemons() {
-      PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
+      PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina - 1, this.quantidadeItensPorPagina, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
         .then(resposta => {
-          this.pokemons = resposta;
+          this.pokemons = resposta.pokemons;
+          this.totalPaginas = resposta.totalPaginas;
         })
         .catch(erro => {
           console.log(erro);
@@ -53,6 +56,10 @@ export default {
       };
     },
 
+    trocarPagina(p) {
+      this.pagina = p;
+      this.buscarPokemons();
+    },
     selecionarPokemon(pokemon) {
       this.pokemonSelecionado.id = pokemon.id;
       this.pokemonSelecionado.nome = pokemon.nome;
@@ -213,6 +220,6 @@ export default {
         </div>
       </div>
     </div>
-    <Paginacao></Paginacao>
+    <Paginacao :totalPaginas="totalPaginas" :quantidadeItens="quantidadeItens" :atual="pagina" :trocarPagina="trocarPagina"></Paginacao>
   </div>
 </template>
