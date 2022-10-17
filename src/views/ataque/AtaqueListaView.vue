@@ -16,8 +16,10 @@ export default {
             ataqueSelecionado: this.inicializarAtaque(),
             isLoading: false,
             fullPage: false,
-            pagina: 0,
-            tamanho: 4,
+            pagina: 1,
+            quantidadeItensPorPagina: 3,
+            totalPaginas: 4,
+            quantidadeItens: 2,
             ordenacao: { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
             termo: "",
             opcoes: [
@@ -38,9 +40,10 @@ export default {
     methods: {
         buscarAtaques() {
             this.isLoading = true;
-            AtaqueDataService.buscarTodosPaginadoOrdenado(this.pagina, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
+            AtaqueDataService.buscarTodosPaginadoOrdenado(this.pagina-1, this.quantidadeItensPorPagina, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
                 .then(resposta => {
-                    this.ataques = resposta;
+                    this.ataques = resposta.ataques;
+                    this.totalPaginas = resposta.totalPaginas;
                     this.isLoading = false;
                 })
                 .catch(erro => {
@@ -49,6 +52,10 @@ export default {
                 })
         },
 
+        trocarPagina(p) {
+            this.pagina = p;
+            this.buscarAtaques();
+        },
         editar(id) {
             this.$router.push({ name: 'ataques-editar', params: { id: id } });
         },
@@ -158,7 +165,8 @@ export default {
                 </tbody>
             </table>
         </div>
-        <Paginacao></Paginacao>
+        <Paginacao :totalPaginas="totalPaginas" :quantidadeItens="quantidadeItens" :atual="pagina"
+            :trocarPagina="trocarPagina"></Paginacao>
     </div>
 
     <!-- Modal -->
