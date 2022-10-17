@@ -17,7 +17,7 @@ export default {
       pokemonDetalhar: new PokemonResponse(),
       isLoading: false,
       pagina: 1,
-      quantidadeItensPorPagina: 5, 
+      quantidadeItensPorPagina: 4,
       totalPaginas: 4,
       quantidadeItens: 2,
       ordenacao: { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
@@ -60,6 +60,7 @@ export default {
       this.pagina = p;
       this.buscarPokemons();
     },
+    
     selecionarPokemon(pokemon) {
       this.pokemonSelecionado.id = pokemon.id;
       this.pokemonSelecionado.nome = pokemon.nome;
@@ -120,9 +121,9 @@ export default {
     </div>
     <h2>Lista de Pokemons</h2>
     <loading v-model:active="isLoading" :is-full-page="fullPage" :loader="'dots'" />
-    <div class="text-center row">
+    <div class="row text-center justify-content-center">
       <div class="col-md-auto" v-for="pokemon in pokemons" :key="pokemon.id">
-        <div class="card mb-4" style="max-width: 230px;">
+        <div class="card mb-4" style="width: 260px;">
           <h5 class="card-header">
             <img
               :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ pokemon.numeroPokedex +'.png'"
@@ -130,17 +131,17 @@ export default {
             Nº.{{pokemon.numeroPokedex}}
           </h5>
           <div class="card-body">
-            <div class="col">
-              <h5 class="card-title">{{pokemon.nome}}</h5>
-              <p class="card-text"> Nível: {{pokemon.nivel}} </p>
+            <h5 class="card-title">{{pokemon.nome}}</h5>
+            <p class="card-text"> Nível: {{pokemon.nivel}} </p>
+            <div class="col-12 justify-content-center">
               <img class="img-fluid rounded-start" style="max-width: 140px;" :id="'imgPokemon'+ pokemon.id"
                 :shiny="false"
                 :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/'+ pokemon.numeroPokedex +'.png'"
                 alt="imagem pokemon" />
-              <button type="button" class="m-1 btn btn-outline-success" @click="shiny(pokemon)">
-                Shiny
-              </button>
             </div>
+            <button type="button" class="m-1 btn btn-outline-success col-5" @click="shiny(pokemon)">
+              Shiny
+            </button>
             <div class="mt-2">
               <button class="m-1 btn btn-outline-primary" data-bs-toggle="modal"
                 data-bs-target="#modalInformacoesPokemon" @click="selecionarPokemonDetalhar(pokemon)">
@@ -220,6 +221,7 @@ export default {
         </div>
       </div>
     </div>
-    <Paginacao :totalPaginas="totalPaginas" :quantidadeItens="quantidadeItens" :atual="pagina" :trocarPagina="trocarPagina"></Paginacao>
+    <Paginacao :totalPaginas="totalPaginas" :quantidadeItens="quantidadeItens" :atual="pagina"
+      :trocarPagina="trocarPagina"></Paginacao>
   </div>
 </template>
