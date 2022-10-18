@@ -60,7 +60,7 @@ export default {
       this.pagina = p;
       this.buscarPokemons();
     },
-    
+
     selecionarPokemon(pokemon) {
       this.pokemonSelecionado.id = pokemon.id;
       this.pokemonSelecionado.nome = pokemon.nome;
