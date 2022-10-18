@@ -25,6 +25,8 @@ export default {
             opcoes: [
                 { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
                 { titulo: "Nome Z-A", direcao: "DESC", campo: "nome" },
+                { titulo: "Tipo A-Z", direcao: "ASC", campo: "tipo_nome" },
+                { titulo: "Tipo Z-A", direcao: "DESC", campo: "tipo_nome" },
             ]
         }
     },
