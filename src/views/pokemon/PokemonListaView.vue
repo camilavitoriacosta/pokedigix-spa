@@ -25,6 +25,10 @@ export default {
       opcoes: [
         { titulo: "Nome A-Z", direcao: "ASC", campo: "nome" },
         { titulo: "Nome Z-A", direcao: "DESC", campo: "nome" },
+        { titulo: "Nº Pokedex A-Z", direcao: "ASC", campo: "numeroPokedex" },
+        { titulo: "Nº Pokedex Z-A", direcao: "DESC", campo: "numeroPokedex" },
+        { titulo: "Nível A-Z", direcao: "ASC", campo: "nivel" },
+        { titulo: "Nível Z-A", direcao: "DESC", campo: "nivel" },
       ]
     };
   },

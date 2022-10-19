@@ -27,6 +27,10 @@ export default {
                 { titulo: "Nome Z-A", direcao: "DESC", campo: "nome" },
                 { titulo: "Tipo A-Z", direcao: "ASC", campo: "tipo_nome" },
                 { titulo: "Tipo Z-A", direcao: "DESC", campo: "tipo_nome" },
+                { titulo: "Categoria A-Z", direcao: "ASC", campo: "categoria" },
+                { titulo: "Categoria Z-A", direcao: "DESC", campo: "categoria" },
+                { titulo: "Força A-Z", direcao: "ASC", campo: "forca" },
+                { titulo: "Força Z-A", direcao: "DESC", campo: "forca" },
             ]
         }
     },
@@ -42,7 +46,7 @@ export default {
     methods: {
         buscarAtaques() {
             this.isLoading = true;
-            AtaqueDataService.buscarTodosPaginadoOrdenado(this.pagina-1, this.quantidadeItensPorPagina, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
+            AtaqueDataService.buscarTodosPaginadoOrdenado(this.pagina - 1, this.quantidadeItensPorPagina, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
                 .then(resposta => {
                     this.ataques = resposta.ataques;
                     this.totalPaginas = resposta.totalPaginas;
