@@ -4,6 +4,8 @@ import ModalExclusao from '../../components/ModalExclusao.vue';
 import Busca from '../../components/Busca.vue';
 import Paginacao from '../../components/Paginacao.vue'
 import Ordenacao from '../../components/Ordenacao.vue'
+import CardPokemon from '../../components/CardPokemon.vue';
+
 import Loading from "vue-loading-overlay";
 
 import { useCookies } from "vue3-cookies";
@@ -25,7 +27,8 @@ export default {
         ModalExclusao,
         Busca,
         Paginacao,
-        Ordenacao
+        Ordenacao,
+        CardPokemon
     },
 
     methods: {
@@ -80,6 +83,8 @@ export default {
         trocar(treinador) {
             cookies.set('treinador_id', treinador.id, '10min');
             cookies.set('treinador_nome', treinador.nome, '10min');
+            this.$router.push({ name: 'treinador-perfil', params: { id: treinador.id } });
+
         }
     },
 
@@ -105,7 +110,7 @@ export default {
         <div class="text-center row">
             <div class="col-md-auto mb-4" v-for="treinador in treinadores" :key="treinador.id">
                 <div class="card h-100" style="width: 300px;">
-                    <h5 class="card-header">
+                    <h5 class="card-header d-flex justify-content-center align-items-center">
                         {{treinador.nome}}
                         <button class="btn" @click="trocar(treinador)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -170,20 +175,7 @@ export default {
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-auto" v-for="pokemon in pokemonsTreinador" style="width: 250px;">
-                            <div class="card mb-3">
-                                <div class="row g-0">
-                                    <div class="col-md-4">
-                                        <img :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ pokemon.numeroPokedex +'.png'"
-                                            alt="imagem pokemon" />
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Nº. {{pokemon.numeroPokedex}}</h5>
-                                            <p class="card-text">{{pokemon.nome}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <CardPokemon :pokemon="pokemon"> </CardPokemon>
                         </div>
                     </div>
                 </div>

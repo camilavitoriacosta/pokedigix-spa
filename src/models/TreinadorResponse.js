@@ -2,7 +2,11 @@ export default class TreinadorResponse {
     constructor() {
         this.id = null;
         this.nome = null;
-        this.endereco = null;
+        this.endereco = {
+            id: null,
+            regiao: null,
+            cidade: null
+        };
         this.dinheiro = 0;
         this.nivel = 0;
         this.insignias = [];

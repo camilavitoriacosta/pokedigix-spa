@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const PokemonListaView = () => import('@/views/pokemon/PokemonListaView.vue');
 const TreinadorListaView = () => import('@/views//treinador/TreinadorListaView.vue');
 const TreinadorNovoView = () => import('@/views//treinador/TreinadorNovoView.vue');
+const TreinadorPerfilView = () => import('@/views//treinador/TreinadorPerfilView.vue');
 const PokemonNovoView = () => import('@/views//pokemon/PokemonNovoView.vue');
 const TipoNovoView = () => import('@/views//tipo/TipoNovoView.vue');
 const TipoEditarView = () => import('@/views//tipo/TipoEditarView.vue');
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/treinadores/lista',
       name: 'treinadores-lista',
       component: TreinadorListaView
+    },
+    {
+      path: '/treinadores/perfil/:id',
+      name: 'treinador-perfil',
+      component: TreinadorPerfilView
     },
     {
       path: '/treinadores/novo',
