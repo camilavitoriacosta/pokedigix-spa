@@ -1,5 +1,19 @@
-<script setup>
+<script >
+import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
+
+export default {
+    data() {
+        return {
+            treinadorNome: ""
+        }
+    },
+    mounted() {
+        this.treinadorNome = cookies.get('treinador_nome');
+    }
+}
 </script>
 
 <template>
@@ -89,6 +103,22 @@ import { RouterLink } from 'vue-router';
                             </ul>
                         </li>
                     </ul>
+                    <div class="treinador-logado d-flex" v-if="treinadorNome">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{treinadorNome}}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <RouterLink class="dropdown-item" to="/treinadores/lista">Trocar Treinador
+                                        </RouterLink>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
