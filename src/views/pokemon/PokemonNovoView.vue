@@ -5,6 +5,8 @@ import PokemonResponse from '../../models/PokemonResponse';
 import TipoDataService from "../../services/TipoDataService"
 import AtaqueDataService from "../../services/AtaqueDataService"
 import MensagemSucesso from '../../components/MensagemSucesso.vue';
+import MensagemErro from "../../components/MensagemErro.vue"
+
 
 export default {
     name: "pokemons-novo",
@@ -17,15 +19,26 @@ export default {
             salvo: false,
             ataqueSelecionado: 0,
             quantidade: 0,
-            ataquesSelecionados: []
+            ataquesSelecionados: [],
+            mensagemDeErro: "",
         };
     },
 
     components: {
-        MensagemSucesso
+        MensagemSucesso,
+        MensagemErro
     },
 
     methods: {
+        getChildInterface(childInterface) {
+            // Setting the interface when emitted from child
+            this.$options.childInterface = childInterface;
+        },
+
+        ativar() {
+            this.$options.childInterface.ativar();
+        },
+
         carregarTipos() {
             TipoDataService.buscarTodos()
                 .then(resposta => {
@@ -37,6 +50,7 @@ export default {
                     console.log(erro);
                 });
         },
+
         carregarAtaques() {
             AtaqueDataService.buscarTodos()
                 .then(resposta => {
@@ -46,6 +60,7 @@ export default {
                     console.log(erro);
                 });
         },
+
         adicionar() {
             if (this.ataquesSelecionados.length < 4 && this.ataqueSelecionado != 0) {
                 this.ataquesSelecionados.push(this.ataqueSelecionado);
@@ -53,6 +68,7 @@ export default {
                 this.ataqueSelecionado = 0;
             }
         },
+
         salvar() {
             this.pokemonRequest.tiposIds = [...new Set(this.pokemonRequest.tiposIds.filter(tipoId => tipoId != 0))];
             this.pokemonRequest.ataquesIds = this.ataquesSelecionados.map(ataque => ataque.id);
@@ -64,7 +80,9 @@ export default {
                 })
                 .catch(erro => {
                     console.log(erro);
+                    this.mensagemDeErro = erro.response.data.type + ": " + erro.response.data.errors;
                     this.salvo = false;
+                    this.ativar();
                 });
         },
         remover(index) {
@@ -81,7 +99,7 @@ export default {
     <div class="container  mt-4">
         <MensagemSucesso :salvo="salvo">
             <span>O Pokemon foi salvo com sucesso!</span>
-            <span> Pokemon { id: {{pokemonResponse.id}}, nome: {{ pokemonResponse.nome}} } </span>
+            <span> Pokemon { id: {{ pokemonResponse.id }}, nome: {{ pokemonResponse.nome }} } </span>
         </MensagemSucesso>
         <div class="card">
             <div class="card-body">
@@ -90,9 +108,9 @@ export default {
                     <div class="card" style="width: 140px; height: 150px;">
                         <img :alt="'Imagem do Pokemon' + pokemonRequest.nome" :title="pokemonRequest.nome"
                             class="card-img" :src="
-                              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
-                              pokemonRequest.numeroPokedex +
-                              '.png' 
+                                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+                                pokemonRequest.numeroPokedex +
+                                '.png'
                             " v-if="pokemonRequest.numeroPokedex > 0" />
                     </div>
                     <div class="row">
@@ -173,7 +191,7 @@ export default {
                         <div class="col-6">
                             <label for="tipo1" class="form-label"> Tipo 1:</label>
                             <select id="tipo1" class="form-select" v-model="pokemonRequest.tiposIds[0]">
-                                <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{tipo.nome}}
+                                <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{ tipo.nome }}
                                 </option>
                             </select>
                         </div>
@@ -181,7 +199,7 @@ export default {
                             <label for="tipo2" class="form-label"> Tipo 2:</label>
                             <select id="tipo2" class="form-select" v-model="pokemonRequest.tiposIds[1]">
                                 <option value="0"> Nenhum </option>
-                                <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{tipo.nome}} </option>
+                                <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{ tipo.nome }} </option>
                             </select>
                         </div>
                     </div>
@@ -192,7 +210,7 @@ export default {
                                 <select id="ataque1" class="form-select" v-model="ataqueSelecionado">
                                     <option value="0"> Nenhum </option>
                                     <option v-for="ataque in ataques" :key="ataque.id" :value="ataque">
-                                        {{ataque.nome}}
+                                        {{ ataque.nome }}
                                     </option>
                                 </select>
                             </div>
@@ -212,7 +230,7 @@ export default {
                                     style="width:230px">
                                     <div class="card-header row align-items-center">
                                         <div class="col-10">
-                                            <h5 class="card-title"> {{ataque.nome}} </h5>
+                                            <h5 class="card-title"> {{ ataque.nome }} </h5>
                                         </div>
                                         <div class="col-2">
                                             <button @click.prevent="remover(index)" class="btn">
@@ -225,9 +243,9 @@ export default {
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <p class="card-text"> Força: {{ataque.forca}} </p>
-                                        <p class="card-text"> Tipo: {{ataque.tipo.nome}} </p>
-                                        <p class="card-text"> Categoria: {{ataque.categoria}} </p>
+                                        <p class="card-text"> Força: {{ ataque.forca }} </p>
+                                        <p class="card-text"> Tipo: {{ ataque.tipo.nome }} </p>
+                                        <p class="card-text"> Categoria: {{ ataque.categoria }} </p>
                                     </div>
                                 </div>
                             </div>
@@ -241,5 +259,6 @@ export default {
                 </form>
             </div>
         </div>
+        <MensagemErro :mensagemDeErro="mensagemDeErro" :ativo="ativo" @interface="getChildInterface"></MensagemErro>
     </div>
 </template>

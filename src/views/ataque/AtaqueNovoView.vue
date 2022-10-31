@@ -5,8 +5,6 @@ import AtaqueRequest from "../../models/AtaqueRequest"
 import AtaqueResponse from "../../models/AtaqueResponse"
 import MensagemSucesso from "../../components/MensagemSucesso.vue"
 import MensagemErro from "../../components/MensagemErro.vue"
-import { ref } from 'vue';
-
 
 export default {
     name: "ataques-novo",

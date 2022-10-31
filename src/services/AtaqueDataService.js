@@ -2,7 +2,7 @@ import http from '../http-commons'
 
 class AtaqueDataService {
     async buscarTodos() {
-        let resposta = await http.get('/ataques');
+        let resposta = await http.get('/ataques/todos');
         return resposta.data;
     }
 
