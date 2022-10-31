@@ -4,6 +4,9 @@ import TipoDataService from "../../services/TipoDataService"
 import AtaqueRequest from "../../models/AtaqueRequest"
 import AtaqueResponse from "../../models/AtaqueResponse"
 import MensagemSucesso from "../../components/MensagemSucesso.vue"
+import MensagemErro from "../../components/MensagemErro.vue"
+import { ref } from 'vue';
+
 
 export default {
     name: "ataques-novo",
@@ -30,13 +33,24 @@ export default {
                     nome: "Efeito",
                     nomeBanco: "EFEITO"
                 }
-            ]
+            ],
+            mensagemDeErro: "",
         };
     },
-    components:{
-        MensagemSucesso
+    components: {
+        MensagemSucesso,
+        MensagemErro
     },
     methods: {
+        getChildInterface(childInterface) {
+            // Setting the interface when emitted from child
+            this.$options.childInterface = childInterface;
+        },
+
+        ativar() {
+            this.$options.childInterface.ativar();
+        },
+
         carregarTipos() {
             TipoDataService.buscarTodos()
                 .then(resposta => {
@@ -64,7 +78,10 @@ export default {
                 })
                 .catch(erro => {
                     console.log(erro);
+
+                    this.mensagemDeErro = erro.response.data.type + ": " + erro.response.data.errors;
                     this.salvo = false;
+                    this.ativar();
                 });
         }
     },
@@ -72,7 +89,6 @@ export default {
         this.ataqueRequest.categoria = this.categorias[0].nomeBanco;
         this.carregarTipos();
     },
-    components: { MensagemSucesso }
 }
 </script>
 
@@ -80,24 +96,25 @@ export default {
     <div class="container  mt-4">
         <MensagemSucesso :salvo="salvo">
             <span>O Ataque foi salvo com sucesso!</span>
-            <span> Ataque { id: {{ataqueResponse.id}}, nome: {{ataqueResponse.nome}} } </span>
+            <span> Ataque { id: {{ ataqueResponse.id }}, nome: {{ ataqueResponse.nome }} } </span>
         </MensagemSucesso>
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Ataque </h1>
-                <form class="row g-3">
+                <form class="row g-3" @submit.prevent="salvar">
                     <div class="col-12">
                         <label for="nome" class="form-label">Nome:</label>
                         <input type="text" class="form-control" id="nome" required v-model="ataqueRequest.nome">
                     </div>
                     <div class="col-6">
                         <label for="forca" class="form-label">Força:</label>
-                        <input type="text" class="form-control" id="forca" required v-model="ataqueRequest.forca"
+                        <input type="number" class="form-control" id="forca" required v-model="ataqueRequest.forca"
                             :disabled="desabilitarForca">
                     </div>
                     <div class="col-6">
                         <label for="acuracia" class="form-label">Acuracia:</label>
-                        <input type="text" class="form-control" id="acuracia" required v-model="ataqueRequest.acuracia">
+                        <input type="number" class="form-control" id="acuracia" required
+                            v-model="ataqueRequest.acuracia">
                     </div>
                     <div class="col-3">
                         <label for="pontosDePoder" class="form-label">Pontos de Poder:</label>
@@ -109,14 +126,14 @@ export default {
                         <select id="categoria" class="form-select" v-model="ataqueRequest.categoria"
                             v-on:change="escolherCategoria">
                             <option v-for="categoria in categorias" :key="categoria.indice"
-                                :value="categoria.nomeBanco"> {{categoria.nome}}
+                                :value="categoria.nomeBanco"> {{ categoria.nome }}
                             </option>
                         </select>
                     </div>
                     <div class="col-12">
                         <label for="tipo" class="form-label"> Tipo </label>
                         <select id="tipo" class="form-select" v-model="ataqueRequest.tipoId">
-                            <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{tipo.nome}}
+                            <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id"> {{ tipo.nome }}
                             </option>
                         </select>
                     </div>
@@ -125,9 +142,10 @@ export default {
                         <textarea class="form-control" id="descricao" rows="2" v-model="ataqueRequest.descricao"
                             required></textarea>
                     </div>
-                    <button @click.prevent="salvar" class="btn btn-dark">Salvar</button>
+                    <button type="submit" class="btn btn-dark" id="liveToastBtn">Salvar</button>
                 </form>
             </div>
         </div>
+        <MensagemErro :mensagemDeErro="mensagemDeErro" :ativo="ativo" @interface="getChildInterface"></MensagemErro>
     </div>
 </template>

@@ -1,9 +1,9 @@
 export default class AtaqueRequest {
     constructor() {
         this.nome = null;
-        this.forca = 0;
-        this.acuracia = 0;
-        this.pontosDePoder = 0;
+        this.forca = null;
+        this.acuracia = null;
+        this.pontosDePoder = null;
         this.categoria = null;
         this.descricao = null;
         this.tipoId = null;
