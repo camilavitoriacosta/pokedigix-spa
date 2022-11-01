@@ -80,7 +80,7 @@ export default {
                     this.pokemonRequest = new PokemonRequest();
                 })
                 .catch(erro => {
-                    // console.log(erro);
+                    console.log(erro);
                     this.construirMensagemErro(erro.response.data);
                     this.ativar();
                     this.salvo = false;
@@ -90,17 +90,21 @@ export default {
         construirMensagemErro(data) {
             this.mensagemDeErro.status = data.status;
             this.mensagemDeErro.tipo = data.type;
+            this.mensagemDeErro.mensagem = data.errors[0];
+
+            const excecoes = {
+                DataIntegrityViolationException() {
+                    this.mensagemDeErro.mensagem = "Preencha todos os campos obrigatorios.";
+                },
+
+                NivelPokemonInvalidoException() {
+                    document.getElementById("nivel").setCustomValidity(this.mensagemDeErro.mensagem)
+                }
+            }
 
             document.getElementById("nivel").setCustomValidity("");
 
-            if (this.mensagemDeErro.tipo == "DataIntegrityViolationException") {
-                this.mensagemDeErro.mensagem = "Preencha todos os campos obrigatorios.";
-            }
-            else if (this.mensagemDeErro.tipo == "NivelPokemonInvalidoException") {
-                console.log(data);
-                this.mensagemDeErro.mensagem = data.errors[0];
-                document.getElementById("nivel").setCustomValidity(this.mensagemDeErro.mensagem)
-            }
+            excecoes[data.type]();
         },
 
         remover(index) {
