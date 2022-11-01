@@ -2,6 +2,7 @@
 import AtaqueDataService from "../../services/AtaqueDataService"
 import TipoDataService from "../../services/TipoDataService"
 import AtaqueRequest from "../../models/AtaqueRequest"
+import MessagemErroDTO from "../../models/MessagemErroDTO"
 import AtaqueResponse from "../../models/AtaqueResponse"
 import MensagemSucesso from "../../components/MensagemSucesso.vue"
 import MensagemErro from "../../components/MensagemErro.vue"
@@ -32,7 +33,7 @@ export default {
                     nomeBanco: "EFEITO"
                 }
             ],
-            mensagemDeErro: "",
+            mensagemDeErro: new MessagemErroDTO(),
         };
     },
     components: {
@@ -77,10 +78,18 @@ export default {
                 .catch(erro => {
                     console.log(erro);
 
-                    this.mensagemDeErro = erro.response.data.type + ": " + erro.response.data.errors;
+                    this.construirMensagemErro(erro.response.data);
+
                     this.salvo = false;
                     this.ativar();
                 });
+        },
+        
+        construirMensagemErro(data) {
+            this.mensagemDeErro.status = data.status;
+            this.mensagemDeErro.tipo = data.type;
+
+            this.mensagemDeErro.mensagem = data.errors[0];
         }
     },
     mounted() {
@@ -99,15 +108,21 @@ export default {
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Ataque </h1>
-                <form class="row g-3" @submit.prevent="salvar">
+                <form class="row g-3 needs-validation" @submit.prevent="salvar">
                     <div class="col-12">
                         <label for="nome" class="form-label">Nome:</label>
                         <input type="text" class="form-control" id="nome" required v-model="ataqueRequest.nome">
                     </div>
                     <div class="col-6">
                         <label for="forca" class="form-label">Força:</label>
-                        <input type="number" class="form-control" id="forca" required v-model="ataqueRequest.forca"
-                            :disabled="desabilitarForca">
+                        <div class="has-validation">
+                            <input type="number" class="form-control" id="forca" required v-model="ataqueRequest.forca"
+                                :disabled="desabilitarForca">
+                            <div class="invalid-feedback">
+                                {{mensagemDeErroDTO.mensagemDeErro}}
+                            </div>
+                        </div>
+
                     </div>
                     <div class="col-6">
                         <label for="acuracia" class="form-label">Acuracia:</label>

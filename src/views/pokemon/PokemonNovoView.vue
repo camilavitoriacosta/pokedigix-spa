@@ -6,6 +6,7 @@ import TipoDataService from "../../services/TipoDataService"
 import AtaqueDataService from "../../services/AtaqueDataService"
 import MensagemSucesso from '../../components/MensagemSucesso.vue';
 import MensagemErro from "../../components/MensagemErro.vue"
+import MensagemErroDTO from '../../models/MessagemErroDTO';
 
 
 export default {
@@ -20,7 +21,7 @@ export default {
             ataqueSelecionado: 0,
             quantidade: 0,
             ataquesSelecionados: [],
-            mensagemDeErro: "",
+            mensagemDeErro: new MensagemErroDTO(),
         };
     },
 
@@ -79,12 +80,29 @@ export default {
                     this.pokemonRequest = new PokemonRequest();
                 })
                 .catch(erro => {
-                    console.log(erro);
-                    this.mensagemDeErro = erro.response.data.type + ": " + erro.response.data.errors;
-                    this.salvo = false;
+                    // console.log(erro);
+                    this.construirMensagemErro(erro.response.data);
                     this.ativar();
+                    this.salvo = false;
                 });
         },
+
+        construirMensagemErro(data) {
+            this.mensagemDeErro.status = data.status;
+            this.mensagemDeErro.tipo = data.type;
+
+            document.getElementById("nivel").setCustomValidity("");
+
+            if (this.mensagemDeErro.tipo == "DataIntegrityViolationException") {
+                this.mensagemDeErro.mensagem = "Preencha todos os campos obrigatorios.";
+            }
+            else if (this.mensagemDeErro.tipo == "NivelPokemonInvalidoException") {
+                console.log(data);
+                this.mensagemDeErro.mensagem = data.errors[0];
+                document.getElementById("nivel").setCustomValidity(this.mensagemDeErro.mensagem)
+            }
+        },
+
         remover(index) {
             this.ataquesSelecionados.splice(index, 1);
         }
@@ -92,6 +110,15 @@ export default {
     mounted() {
         this.carregarTipos();
         this.carregarAtaques();
+
+        const form = document.querySelector('.needs-validation')
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
     },
 }
 </script>
@@ -104,7 +131,7 @@ export default {
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title"> Cadastrar Pokemon </h1>
-                <form class="g-3">
+                <form class="g-3 needs-validation" novalidate @submit.prevent="salvar">
                     <div class="card" style="width: 140px; height: 150px;">
                         <img :alt="'Imagem do Pokemon' + pokemonRequest.nome" :title="pokemonRequest.nome"
                             class="card-img" :src="
@@ -128,9 +155,15 @@ export default {
 
                     <div class="row">
                         <div class="col-6">
-                            <label for="nível" class="form-label">Nível:</label>
-                            <input type="number" class="form-control" id="nível" required
-                                v-model="pokemonRequest.nivel">
+                            <label for="nivel" class="form-label">Nível:</label>
+                            <div class="has-validation">
+                                <input type="number" class="form-control" id="nivel" required
+                                    v-model="pokemonRequest.nivel">
+                                <div v-if="this.mensagemDeErro.tipo == 'NivelPokemonInvalidoException'"
+                                    class="invalid-feedback">
+                                    {{ mensagemDeErro.mensagem }}
+                                </div>
+                            </div>
                         </div>
                         <div class="col-6">
                             <label for="felicidade" class="form-label">Felicidade:</label>
@@ -253,7 +286,7 @@ export default {
                     </fieldset>
                     <div class="row text-center">
                         <div class="col-12 mt-2">
-                            <button @click.prevent="salvar" class="btn btn-dark col-12">Salvar</button>
+                            <button type="submit" class="btn btn-dark col-12">Salvar</button>
                         </div>
                     </div>
                 </form>

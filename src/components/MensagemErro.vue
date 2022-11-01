@@ -1,10 +1,11 @@
 <script>
 import { Toast } from 'bootstrap';
+import MessagemErroDTO from "../models/MessagemErroDTO"
 
 export default {
     name: 'mensagem-erro',
     props: {
-        mensagemDeErro: String,
+        mensagemDeErro: MessagemErroDTO,
         ativo: Boolean
     },
     mounted() {
@@ -32,7 +33,7 @@ export default {
     <div class="toast-container position-absolute top-0 end-0 mt-5 p-3">
         <div id="liveToast" class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body">
-                {{ mensagemDeErro }}
+                {{ mensagemDeErro.tipo }}: {{ mensagemDeErro.mensagem }}
             </div>
         </div>
     </div>
