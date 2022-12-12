@@ -11,6 +11,8 @@ const AtaqueNovoView = () => import('@/views//ataque/AtaqueNovoView.vue');
 const AtaqueEditView = () => import('@/views//ataque/AtaqueEditView.vue');
 const AtaqueListaView = () => import('@/views//ataque/AtaqueListaView.vue');
 const PageNotFound = () => import('@/views/PageNotFound.vue');
+const SignUpView = () => import('@/views/SignUpView.vue');
+const LoginView = () => import('@/views/LoginView.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +82,15 @@ const router = createRouter({
       name: 'ataques-lista',
       component: AtaqueListaView
     },
+    {
+      path: '/usuarios/novo',
+      name: 'sign-up',
+      component: SignUpView
+    }, {
+      path: '/usuarios/login',
+      name: 'sign-in',
+      component: LoginView
+    }
   ]
 })
 

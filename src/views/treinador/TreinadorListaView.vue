@@ -84,7 +84,6 @@ export default {
             cookies.set('treinador_id', treinador.id, '10min');
             cookies.set('treinador_nome', treinador.nome, '10min');
             this.$router.push({ name: 'treinador-perfil', params: { id: treinador.id } });
-
         }
     },
 

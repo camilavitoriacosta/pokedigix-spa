@@ -1,5 +1,4 @@
 <script >
-import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
@@ -116,17 +115,36 @@ export default {
                                             d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z" />
                                     </svg>
                                     <span class="mx-2">
-                                        {{treinadorNome}}
+                                        {{ treinadorNome }}
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <RouterLink class="dropdown-item" :to="{ name: 'treinador-perfil', params: { id: treinadorId } }">Perfil
+                                        <RouterLink class="dropdown-item"
+                                            :to="{ name: 'treinador-perfil', params: { id: treinadorId } }">Perfil
                                         </RouterLink>
                                         <RouterLink class="dropdown-item" to="/treinadores/lista">Trocar Treinador
                                         </RouterLink>
                                     </li>
                                 </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <RouterLink to="/usuarios/novo">
+                                    <button class="btn btn-outline-light me-2">
+                                        Sing-up
+                                    </button>
+                                </RouterLink>
+                            </li>
+                            <li class="nav-item">
+                                <RouterLink to="/usuarios/login">
+                                    <button class="btn btn-outline-dark">
+                                        Sing-in
+                                    </button>
+                                </RouterLink>
                             </li>
                         </ul>
                     </div>
