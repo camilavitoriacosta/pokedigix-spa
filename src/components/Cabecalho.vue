@@ -10,6 +10,7 @@ export default {
             treinadorId: ""
         }
     },
+    
     mounted() {
         this.treinadorNome = cookies.get('treinador_nome');
         this.treinadorId = cookies.get('treinador_id');

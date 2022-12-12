@@ -23,7 +23,7 @@ export default {
                     console.log(resposta);
                     cookies.set('token', resposta.data.accessToken, '10min');
                     cookies.set('treinador_nome', resposta.data.username, '10min');
-                    // this.$router.push({ name: 'treinador-perfil', params: { id: treinador.id } });
+                    this.$router.push({ name: 'home'});
                 })
                 .catch(erro => {
                     console.log(erro);
