@@ -3,6 +3,9 @@ import AuthDataService from '../services/AuthDataService';
 import LoginDTO from '../models/LoginDTO';
 import MensagemSucesso from '../components/MensagemSucesso.vue'
 
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
+
 export default {
     name: "sign-up",
     data() {
@@ -18,8 +21,8 @@ export default {
             AuthDataService.acessar(this.loginDTO)
                 .then(resposta => {
                     console.log(resposta);
-                    // cookies.set('token', resposta, '10min');
-                    //cookies.set('treinador_nome', treinador.nome, '10min');
+                    cookies.set('token', resposta.data.accessToken, '10min');
+                    cookies.set('treinador_nome', resposta.data.username, '10min');
                     // this.$router.push({ name: 'treinador-perfil', params: { id: treinador.id } });
                 })
                 .catch(erro => {
