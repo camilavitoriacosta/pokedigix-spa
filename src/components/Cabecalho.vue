@@ -10,10 +10,13 @@ export default {
             treinadorId: ""
         }
     },
-    
+
     mounted() {
-        this.treinadorNome = cookies.get('treinador_nome');
-        this.treinadorId = cookies.get('treinador_id');
+        let usuarioLogado = cookies.get('usuarioLogado');
+        if(usuarioLogado){
+            this.treinadorNome = usuarioLogado.username;
+            this.treinadorId = usuarioLogado.id;
+        }
     }
 }
 </script>
@@ -34,7 +37,7 @@ export default {
                             <RouterLink to="/" class="nav-link active" aria-current="page">Home</RouterLink>
                         </li>
                         <li class="nav-item">
-                            <RouterLink to="/pokemons-selvagens" class="nav-link"> Pokemons Selvagens</RouterLink>
+                            <RouterLink to="/pokemons-selvagens" class="nav-link"> Capturar </RouterLink>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"

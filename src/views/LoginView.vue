@@ -1,6 +1,7 @@
 <script>
 import AuthDataService from '../services/AuthDataService';
 import LoginDTO from '../models/LoginDTO';
+import LoginResponse from '../models/LoginResponse';
 import MensagemSucesso from '../components/MensagemSucesso.vue'
 
 import { useCookies } from "vue3-cookies";
@@ -10,7 +11,9 @@ export default {
     name: "sign-up",
     data() {
         return {
+            lembrar: false,
             loginDTO: new LoginDTO(),
+            loginResponse: new LoginResponse()
         };
     },
     components: {
@@ -20,16 +23,18 @@ export default {
         acessar() {
             AuthDataService.acessar(this.loginDTO)
                 .then(resposta => {
-                    console.log(resposta);
-                    cookies.set('token', resposta.data.accessToken, '10min');
-                    cookies.set('treinador_id', resposta.data.id, '10min');
-                    cookies.set('treinador_nome', resposta.data.username, '10min');
+                    this.loginResponse = resposta;
+                    cookies.set('usuarioLogado', this.loginResponse, this.tempoDeExpiracao());
                     this.$router.push({ name: 'home'});
                 })
                 .catch(erro => {
                     console.log(erro);
                 })
         },
+
+        tempoDeExpiracao() {
+            return this.lembrar ? '1m' : '30min' ;
+        }
 
     },
     mounted() {

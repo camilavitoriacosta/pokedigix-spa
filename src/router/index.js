@@ -1,3 +1,4 @@
+import { nextTick } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router'
 const PokemonListaView = () => import('@/views/pokemon/PokemonListaView.vue');
 const TreinadorListaView = () => import('@/views//treinador/TreinadorListaView.vue');
@@ -13,6 +14,9 @@ const AtaqueListaView = () => import('@/views//ataque/AtaqueListaView.vue');
 const PageNotFound = () => import('@/views/PageNotFound.vue');
 const SignUpView = () => import('@/views/SignUpView.vue');
 const LoginView = () => import('@/views/LoginView.vue');
+
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,9 +93,17 @@ const router = createRouter({
     }, {
       path: '/usuarios/login',
       name: 'sign-in',
-      component: LoginView
+      component: LoginView,
     }
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'sign-in' && !cookies.get('token') ) {
+    next({ name: 'sign-in' })
+  }
+  else{
+    next();
+  }
+});
 export default router
