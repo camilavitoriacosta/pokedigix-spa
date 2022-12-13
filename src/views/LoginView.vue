@@ -22,6 +22,7 @@ export default {
                 .then(resposta => {
                     console.log(resposta);
                     cookies.set('token', resposta.data.accessToken, '10min');
+                    cookies.set('treinador_id', resposta.data.id, '10min');
                     cookies.set('treinador_nome', resposta.data.username, '10min');
                     this.$router.push({ name: 'home'});
                 })
